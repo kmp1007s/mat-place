@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
+const { generateToken } = require("lib/jwt");
 
 const Account = new Schema({
   userId: String,
@@ -28,6 +29,17 @@ Account.statics.localRegister = function({ userId, pwd, userName }) {
  */
 Account.statics.findByUserId = function(userId) {
   return this.findOne({ userId }).exec();
+};
+
+/**
+ * 토큰 생성
+ */
+Account.methods.generateToken = function() {
+  const payload = {
+    _id: this._id
+  };
+
+  return generateToken(payload);
 };
 
 module.exports = mongoose.model("Account", Account);
