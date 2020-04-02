@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
-const { generateToken } = require("lib/jwt");
+import { generateToken } from "lib/jwt";
 
 const Account = new Schema({
   userId: String,
@@ -42,4 +42,4 @@ Account.methods.generateToken = function() {
   return generateToken(payload);
 };
 
-module.exports = mongoose.model("Account", Account);
+export default mongoose.model("Account", Account);

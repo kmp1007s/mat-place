@@ -1,4 +1,4 @@
-const accountModel = require("model/account");
+import accountModel from "model/account";
 import { promiseWrapper, makeErrResponse } from "lib/error";
 import { logInfo, logError } from "lib/log";
 import { makeSignedCookie } from "lib/cookie";

@@ -13,7 +13,7 @@ const COOKIE_SECRET = process.env.COOKIE_SECRET;
 import api from "./api";
 import { logRoutesInfoMiddleWare, logInfo } from "./lib/log";
 import { errorMiddleWare } from "./lib/error";
-const { jwtMiddleWare } = require("./lib/jwt");
+import { jwtMiddleWare } from "./lib/jwt";
 
 import mongoose = require("mongoose");
 mongoose.Promise = global.Promise; // Node Promise

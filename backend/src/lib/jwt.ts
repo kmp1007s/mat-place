@@ -51,8 +51,4 @@ async function jwtMiddleWare(req, res, next) {
   return next();
 }
 
-module.exports = {
-  generateToken,
-  decodeToken,
-  jwtMiddleWare
-};
+export { generateToken, decodeToken, jwtMiddleWare };
