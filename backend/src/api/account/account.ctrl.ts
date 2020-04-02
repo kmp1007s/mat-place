@@ -1,14 +1,14 @@
 const accountModel = require("model/account");
-const { promiseWrapper, makeErrResponse } = require("lib/error");
-const { logInfo, logError } = require("lib/log");
-const { makeSignedCookie } = require("lib/cookie");
+import { promiseWrapper, makeErrResponse } from "lib/error";
+import { logInfo, logError } from "lib/log";
+import { makeSignedCookie } from "lib/cookie";
 
 const RespondToken = (token, res) => {
   res.cookie(...makeSignedCookie("access_token", token));
   res.json({ access_token: token });
 };
 
-exports.localRegister = promiseWrapper(async (req, res) => {
+export const localRegister = promiseWrapper(async (req, res) => {
   let account = null;
 
   account = await accountModel.findByUserId(req.body.userId);
@@ -29,7 +29,7 @@ exports.localRegister = promiseWrapper(async (req, res) => {
   logInfo("Register Success");
 });
 
-exports.localLogin = promiseWrapper(async (req, res) => {
+export const localLogin = promiseWrapper(async (req, res) => {
   let account = null;
 
   account = await accountModel.findByUserId(req.body.userId);
@@ -47,7 +47,7 @@ exports.localLogin = promiseWrapper(async (req, res) => {
   logInfo("Login Success");
 });
 
-exports.logout = promiseWrapper(async (req, res) => {
+export const logout = promiseWrapper(async (req, res) => {
   res.clearCookie("access_token");
   res.redirect("/");
 

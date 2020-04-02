@@ -1,4 +1,4 @@
-const { logError } = require("./log");
+import { logError } from "./log";
 
 function makeErrResponse(errMessage) {
   return {
@@ -18,8 +18,4 @@ function promiseWrapper(fn) {
   };
 }
 
-module.exports = {
-  makeErrResponse,
-  errorMiddleWare,
-  promiseWrapper
-};
+export { makeErrResponse, errorMiddleWare, promiseWrapper };

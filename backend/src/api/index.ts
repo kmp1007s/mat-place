@@ -1,6 +1,6 @@
-const express = require("express");
+import * as express from "express";
 const api = express.Router();
-const account = require("./account");
+import account from "./account";
 
 api.get("/test", (req, res) => {
   res.send("Test");
@@ -8,4 +8,4 @@ api.get("/test", (req, res) => {
 
 api.use("/account", account);
 
-module.exports = api;
+export default api;

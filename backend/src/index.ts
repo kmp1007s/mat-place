@@ -1,21 +1,21 @@
-require("dotenv").config();
+import "dotenv/config";
 
-const express = require("express");
+import * as express from "express"; // module.exports로 exports된 경우 이렇게 불러옴 == import express = require("express");
 const app = express();
 
-const bodyParser = require("body-parser");
-const cookieParser = require("cookie-parser");
+import * as bodyParser from "body-parser";
+import * as cookieParser from "cookie-parser";
 
 const PORT = process.env.PORT || 8080;
 const MONGO_URI = process.env.MONGO_URI;
 const COOKIE_SECRET = process.env.COOKIE_SECRET;
 
-const api = require("./api");
-const { logRoutesInfoMiddleWare } = require("./lib/log");
-const { errorMiddleWare } = require("./lib/error");
+import api from "./api";
+import { logRoutesInfoMiddleWare, logInfo } from "./lib/log";
+import { errorMiddleWare } from "./lib/error";
 const { jwtMiddleWare } = require("./lib/jwt");
 
-const mongoose = require("mongoose");
+import mongoose = require("mongoose");
 mongoose.Promise = global.Promise; // Node Promise
 mongoose
   .connect(MONGO_URI, {
@@ -37,5 +37,5 @@ app
   .use(errorMiddleWare);
 
 app.listen(PORT, () => {
-  console.log(`Server is Listening on ${PORT}`);
+  logInfo(`Server is Listening on ${PORT}`);
 });

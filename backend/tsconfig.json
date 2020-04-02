@@ -1,0 +1,26 @@
+{
+  /* tsconfig.json = Typescript 컴파일을 위한 옵션 모음 파일 */
+  "compilerOptions": {
+    "module": "CommonJS" /* 컴파일 된 js의 모듈 코드 작성 방식 */,
+    "moduleResolution": "node" /* 컴파일 된 js의 모듈 해석 방식 */,
+    "target": "ES2015" /* 컴파일된 js는 ES2015 문법을 사용 */,
+    "sourceMap": true /* 디버깅을 위한 js.map파일 생성 */,
+    "outDir": "dist" /* 컴파일 후 js파일은 dist폴더에 */,
+    "allowJs": true /* JS파일도 컴파일 */,
+    "baseUrl": "." /* 절대경로 import시 기준이 되는 폴더로 만약 해당 폴더에 없을 경우 NODE_PATH 설정된 폴더와 node_modules 체인을 따라 찾음 */,
+    "paths": {
+      /* import path를 re-map할 수 있음 (절대경로 import rule을 추가할 수 있음) */
+      "*": ["src/*", "node_modules/*"]
+    },
+    "typeRoots": [
+      /* d.ts. 정의 파일의 위치 */
+      "node_modules/@types",
+      "src/types"
+    ]
+  },
+  "include": [
+    /* glob패턴으로 src의 모든 파일을 컴파일에 포함 (.ts,.tsx,.d.ts 포함, allowJs시 .js,.jsx도 포함) */
+    "src/**/*"
+  ],
+  "exclude": ["node_modules"] /* node_modules는 컴파일에서 배제 */
+}

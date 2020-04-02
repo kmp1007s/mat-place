@@ -15,4 +15,4 @@ function expiryDate() {
   return new Date(Date.now() + EXPIRES);
 }
 
-module.exports = { makeSignedCookie, expiryDate };
+export { makeSignedCookie, expiryDate };

@@ -1,6 +1,6 @@
 const jwtSecret = process.env.JWT_SECRET;
 const jwt = require("jsonwebtoken");
-const { makeSignedCookie } = require("lib/cookie");
+import { makeSignedCookie } from "lib/cookie";
 
 function generateToken(payload) {
   return new Promise((resolve, reject) => {
@@ -8,7 +8,7 @@ function generateToken(payload) {
       payload,
       jwtSecret,
       {
-        expiresIn: "7d"
+        expiresIn: "1d"
       },
       (error, token) => {
         if (error) reject(error);
@@ -32,14 +32,14 @@ async function jwtMiddleWare(req, res, next) {
   if (!token) return next();
 
   try {
-    const decoded = await decodeToken(token);
+    const decoded: any = await decodeToken(token);
 
     // 토큰 만료시간이 12시간 남은 경우
     if (Date.now() - decoded.iat > 60 * 60 * 1000 * 12) {
       const { _id } = decoded;
       const freshToken = await generateToken({ _id });
 
-      res.cookie(...makeSignedCookie("access_token"), freshToken);
+      res.cookie(...makeSignedCookie("access_token", freshToken));
     }
 
     req.user = decoded;
