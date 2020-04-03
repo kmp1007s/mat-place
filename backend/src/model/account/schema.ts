@@ -1,8 +1,9 @@
-const mongoose = require("mongoose");
-const { Schema } = mongoose;
+import { Schema } from "mongoose";
 import { generateToken } from "lib/jwt";
+import IAccountDocument from "./document";
 
-const Account = new Schema({
+// schema 정의
+const AccountSchema: Schema = new Schema({
   userId: String,
   pwd: String,
   userName: String,
@@ -14,7 +15,11 @@ const Account = new Schema({
 /**
  * 로컬 계정 회원가입
  */
-Account.statics.localRegister = function({ userId, pwd, userName }) {
+AccountSchema.statics.localRegister = function({
+  userId,
+  pwd,
+  userName
+}: any): Promise<IAccountDocument> {
   const account = new this({
     userId,
     pwd,
@@ -27,14 +32,16 @@ Account.statics.localRegister = function({ userId, pwd, userName }) {
 /**
  * UserID로 DB에서 계정을 찾음
  */
-Account.statics.findByUserId = function(userId) {
+AccountSchema.statics.findByUserId = function(
+  userId: string
+): Promise<IAccountDocument> {
   return this.findOne({ userId }).exec();
 };
 
 /**
  * 토큰 생성
  */
-Account.methods.generateToken = function() {
+AccountSchema.methods.generateToken = function(): Promise<any> {
   const payload = {
     _id: this._id
   };
@@ -42,4 +49,4 @@ Account.methods.generateToken = function() {
   return generateToken(payload);
 };
 
-export default mongoose.model("Account", Account);
+export default AccountSchema;
