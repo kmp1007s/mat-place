@@ -3,6 +3,7 @@ import { promiseWrapper, errorResponse } from "lib/error";
 import { logInfo, logError } from "lib/log";
 import { signOption } from "lib/cookie";
 import accountModel from "model/account";
+import * as errorType from "errorType";
 
 const RespondLoginInfo = (token: string, res: Response, userId: string) => {
   res.cookie("access_token", token, signOption());
@@ -14,10 +15,9 @@ export const localRegister = promiseWrapper(async (req, res) => {
 
   // Conflict
   if (account) {
-    const errMessage = "UserID Exists";
-
-    logError(errMessage);
-    return res.status(409).json(errorResponse(errMessage));
+    const errorMessage = errorType.USER_EXISTS;
+    logError(errorMessage);
+    return res.status(409).json(errorResponse(errorMessage));
   }
 
   account = await accountModel.localRegister(req.body);
@@ -32,10 +32,9 @@ export const localLogin = promiseWrapper(async (req, res) => {
   let account = await accountModel.findByUserId(req.body.userId);
 
   if (!account) {
-    const errMessage = "No User";
-
-    logError(errMessage);
-    return res.status(403).json(errorResponse(errMessage));
+    const errorMessage = errorType.CANT_FIND_USER;
+    logError(errorMessage);
+    return res.status(403).json(errorResponse(errorMessage));
   }
 
   const token = await account.generateToken();
