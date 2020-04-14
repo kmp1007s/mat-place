@@ -1,7 +1,7 @@
 import { Document } from "mongoose";
 
 // document type정의
-interface IAccountDocument extends Document {
+interface AccountDocument extends Document {
   // properties
   userId: string;
   pwd: string;
@@ -9,7 +9,7 @@ interface IAccountDocument extends Document {
   createdAt: Date;
 
   // instance methods (methods)
-  generateToken(): Promise<any>;
+  generateToken(): Promise<string>;
 }
 
-export default IAccountDocument;
+export default AccountDocument;

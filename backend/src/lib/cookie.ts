@@ -1,18 +1,32 @@
 const EXPIRES = 60 * 60 * 1000 * 24; // 24시간
 
-function makeSignedCookie(key, value) {
-  const option = {
+interface SignOption {
+  expires: Date;
+  httpOnly: boolean;
+  signed: boolean;
+}
+
+export function signOption(): SignOption {
+  const option: SignOption = {
     expires: expiryDate(),
     httpOnly: true,
     signed: true
   };
 
-  const data = [key, value, option];
-  return data;
+  return option;
 }
 
-function expiryDate() {
+export function expiryDate(): Date {
   return new Date(Date.now() + EXPIRES);
 }
 
-export { makeSignedCookie, expiryDate };
+// function makeSignedCookie(key, value) {
+//   const option = {
+//     expires: expiryDate(),
+//     httpOnly: true,
+//     signed: true
+//   };
+
+//   const data = [key, value, option];
+//   return data;
+// }

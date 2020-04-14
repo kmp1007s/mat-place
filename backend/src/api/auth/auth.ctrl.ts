@@ -1,48 +1,45 @@
-import accountModel from "model/account";
-import { promiseWrapper, makeErrResponse } from "lib/error";
+import { Response } from "express";
+import { promiseWrapper, errorResponse } from "lib/error";
 import { logInfo, logError } from "lib/log";
-import { makeSignedCookie } from "lib/cookie";
+import { signOption } from "lib/cookie";
+import accountModel from "model/account";
 
-const RespondToken = (token, res) => {
-  res.cookie(...makeSignedCookie("access_token", token));
-  res.json({ access_token: token });
+const RespondLoginInfo = (token: string, res: Response, userId: string) => {
+  res.cookie("access_token", token, signOption());
+  res.json({ access_token: token, userId });
 };
 
 export const localRegister = promiseWrapper(async (req, res) => {
-  let account = null;
-
-  account = await accountModel.findByUserId(req.body.userId);
+  let account = await accountModel.findByUserId(req.body.userId);
 
   // Conflict
   if (account) {
     const errMessage = "UserID Exists";
 
     logError(errMessage);
-    return res.status(409).json(makeErrResponse(errMessage));
+    return res.status(409).json(errorResponse(errMessage));
   }
 
   account = await accountModel.localRegister(req.body);
 
   const token = await account.generateToken();
-  RespondToken(token, res);
+  RespondLoginInfo(token, res, account.userId);
 
   logInfo("Register Success");
 });
 
 export const localLogin = promiseWrapper(async (req, res) => {
-  let account = null;
-
-  account = await accountModel.findByUserId(req.body.userId);
+  let account = await accountModel.findByUserId(req.body.userId);
 
   if (!account) {
     const errMessage = "No User";
 
     logError(errMessage);
-    return req.status(403).json(makeErrResponse(errMessage));
+    return res.status(403).json(errorResponse(errMessage));
   }
 
   const token = await account.generateToken();
-  RespondToken(token, res);
+  RespondLoginInfo(token, res, account.userId);
 
   logInfo("Login Success");
 });

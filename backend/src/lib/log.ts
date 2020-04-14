@@ -1,16 +1,19 @@
 import * as colors from "colors";
+import { Request, Response, NextFunction } from "express";
 
-function logRoutesInfoMiddleWare(req, res, next) {
+export function logRoutesInfoMiddleWare(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   console.log(colors.yellow(`${req.url}[${req.method}]`));
   next();
 }
 
-function logInfo(msg) {
+export function logInfo(msg: string) {
   console.log(colors.green(msg));
 }
 
-function logError(msg) {
+export function logError(msg: string) {
   console.log(colors.red(msg));
 }
-
-export { logRoutesInfoMiddleWare, logInfo, logError };

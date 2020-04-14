@@ -14,9 +14,10 @@
     },
     "typeRoots": [
       /* d.ts. 정의 파일의 위치 */
-      "node_modules/@types",
-      "src/types"
+      "./src/types",
+      "./node_modules/@types"
     ]
+    // "declaration": true // d.ts파일의 생성 여부 -> ts는 선언과 구현을 한 코드에서 동시에 하는 것이고 js는 구현만을, d.ts는 선언만을 제공
   },
   "include": [
     /* glob패턴으로 src의 모든 파일을 컴파일에 포함 (.ts,.tsx,.d.ts 포함, allowJs시 .js,.jsx도 포함) */

@@ -13,18 +13,19 @@
     "@types/body-parser": "^1.19.0",
     "@types/cookie-parser": "^1.4.2",
     "@types/express": "^4.17.4",
+    "@types/jsonwebtoken": "^8.3.8",
     "@types/mongoose": "^5.7.8",
-    "@types/node": "^13.9.8",
+    "@types/node": "^13.11.0",
     "nodemon": "^2.0.2",
     "tsc-watch": "^4.2.3",
     "typescript": "^3.8.3"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "./node_modules/.bin/tsc",
     "start": "cross-env NODE_PATH=dist node dist",
     "ts": "yarn build && yarn start",
-    "start:watch": "cross-env NODE_PATH=dist nodemon --watch dist/ dist/index.js",
-    "ts:watch": "tsc-watch --onSuccess \" cross-env NODE_PATH=dist node dist/index.js \" "
+    "start-watch": "cross-env NODE_PATH=dist nodemon --watch dist/ dist/index.js",
+    "ts-watch": "tsc-watch --onSuccess \" cross-env NODE_PATH=dist node dist/index.js \" "
   },
   "license": "MIT"
 }

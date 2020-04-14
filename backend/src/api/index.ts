@@ -1,11 +1,9 @@
 import * as express from "express";
+import auth from "./auth";
+import profile from "./profile";
+
 const api = express.Router();
-import account from "./account";
-
-api.get("/test", (req, res) => {
-  res.send("Test");
-});
-
-api.use("/account", account);
+api.use("/auth", auth);
+api.use("/profile", profile);
 
 export default api;

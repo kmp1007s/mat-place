@@ -1,15 +1,19 @@
 import { Model, model } from "mongoose";
 import AccountSchema from "./schema";
-import IAccountDocument from "./document";
+import AccountDocument from "./document";
 
 // model type 정의
-interface IAccountModel extends Model<IAccountDocument> {
+interface AccountModel extends Model<AccountDocument> {
   // model methods (static methods)
-  findByUserId(userId: string): Promise<IAccountDocument>;
-  localRegister(searchObject: any): Promise<IAccountDocument>;
+  findByUserId(userId: string): Promise<AccountDocument>;
+  findByUserIdAndUpdate(
+    userId: string,
+    update: object
+  ): Promise<AccountDocument>;
+  localRegister(accountData: any): Promise<AccountDocument>;
 }
 
-const Account: IAccountModel = model<IAccountDocument, IAccountModel>(
+const Account: AccountModel = model<AccountDocument, AccountModel>(
   "Account",
   AccountSchema
 );
