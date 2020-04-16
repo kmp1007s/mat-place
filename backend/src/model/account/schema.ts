@@ -15,11 +15,7 @@ const AccountSchema: Schema = new Schema({
 /**
  * 로컬 계정 회원가입
  */
-AccountSchema.statics.localRegister = function ({
-  userId,
-  pwd,
-  userName,
-}): Promise<AccountDocument> {
+AccountSchema.statics.localRegister = function ({ userId, pwd, userName }) {
   const account = new this({
     userId,
     pwd,
@@ -32,16 +28,11 @@ AccountSchema.statics.localRegister = function ({
 /**
  * UserID로 DB에서 계정을 찾음
  */
-AccountSchema.statics.findByUserId = function (
-  userId: string
-): Promise<AccountDocument> {
+AccountSchema.statics.findByUserId = function (userId) {
   return this.findOne({ userId });
 };
 
-AccountSchema.statics.findByUserIdAndUpdate = function (
-  userId: string,
-  update: object
-): Promise<AccountDocument> {
+AccountSchema.statics.findByUserIdAndUpdate = function (userId, update) {
   return this.findOneAndUpdate({ userId }, update, {
     new: true,
   });

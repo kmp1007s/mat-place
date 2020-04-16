@@ -1,18 +1,18 @@
 import { promiseWrapper, errorResponse } from "lib/error";
-import { logInfo, logError } from "lib/log";
+import { logInfo } from "lib/log";
 import accountModel from "model/account";
 import * as errorType from "errorType";
 
-export const getProfile = promiseWrapper(async (req, res) => {
+/**
+ * [GET] /:userId - userId로 프로필 조회
+ */
+export const readProfile = promiseWrapper(async (req, res) => {
   const { userId } = req.params;
 
   let account = await accountModel.findByUserId(userId);
 
-  if (!account) {
-    const errMessage = errorType.CANT_FIND_USER;
-    logError(errMessage);
-    return res.status(404).json(errorResponse(errMessage));
-  }
+  if (!account)
+    return res.status(404).json(errorResponse(errorType.CANT_FIND_USER));
 
   res.json({
     userId: account.userId,
@@ -20,26 +20,25 @@ export const getProfile = promiseWrapper(async (req, res) => {
     createdAt: account.createdAt,
   });
 
-  logInfo("Get Profile Success");
+  logInfo("Get profile success");
 });
 
+/**
+ * [PATCH] /:userId - userId로 프로필 업데이트
+ */
 export const updateProfile = promiseWrapper(async (req, res) => {
   const { userId } = req.params;
 
+  let account = await accountModel.findByUserId(userId);
+
+  if (!account)
+    return res.status(404).json(errorResponse(errorType.CANT_FIND_USER));
+
   // 토큰 자격증명 비교를 통한 권한 체크
-  if (userId !== req.user.userId) {
-    const errorMessage = errorType.AUTHORIZATION_DENIED;
-    logError(errorMessage);
-    return res.status(403).json(errorResponse(errorMessage));
-  }
+  if (userId !== req.user.userId)
+    return res.status(403).json(errorResponse(errorType.AUTHORIZATION_DENIED));
 
-  let account = await accountModel.findByUserIdAndUpdate(userId, req.body);
-
-  if (!account) {
-    const errorMessage = errorType.CANT_FIND_USER;
-    logError(errorMessage);
-    return res.status(404).json(errorResponse(errorMessage));
-  }
+  account = await accountModel.findByUserIdAndUpdate(userId, req.body);
 
   res.json({
     userId: account.userId,
@@ -47,5 +46,5 @@ export const updateProfile = promiseWrapper(async (req, res) => {
     createdAt: account.createdAt,
   });
 
-  logInfo("Update Profile Success");
+  logInfo("Update profile success");
 });

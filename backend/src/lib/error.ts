@@ -12,6 +12,7 @@ type AsyncHandler = (
 ) => Promise<any>;
 
 export function errorResponse(errorMessage: string): ErrorResponse {
+  logError(errorMessage);
   return {
     error: errorMessage,
   };
