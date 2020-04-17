@@ -21,10 +21,10 @@ const PlaceListSchema: Schema = new Schema({
   },
 });
 
-PlaceListSchema.statics.createPlaceList = function (authorId, placeInfo) {
+PlaceListSchema.statics.createPlaceList = function (authorId, placeListInfo) {
   return new this({
     authorId,
-    ...placeInfo,
+    ...placeListInfo,
   }).save();
 };
 
@@ -39,6 +39,11 @@ PlaceListSchema.statics.findByGroup = function (authorId, group) {
 PlaceListSchema.statics.updateGroup = async function (authorId, ids, group) {
   await this.updateMany({ authorId, _id: { $in: ids } }, { $set: { group } });
   return this.find({ authorId, _id: { $in: ids } });
+};
+
+PlaceListSchema.statics.deleteGroup = async function (group) {
+  await this.updateMany({ group }, { group: "none" });
+  return this.find({ group: "none" });
 };
 
 export default PlaceListSchema;

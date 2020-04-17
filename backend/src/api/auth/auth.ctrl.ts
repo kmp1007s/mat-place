@@ -1,6 +1,5 @@
 import { Response } from "express";
 import { promiseWrapper, errorResponse } from "lib/error";
-import { logInfo } from "lib/log";
 import { signOption } from "lib/cookie";
 import accountModel from "model/account";
 import * as errorType from "errorType";
@@ -25,7 +24,7 @@ export const localRegister = promiseWrapper(async (req, res) => {
   const token = await account.generateToken();
   RespondLoginInfo(token, res, account.userId);
 
-  logInfo("Register success");
+  "register".console("success");
 });
 
 /**
@@ -40,7 +39,7 @@ export const localLogin = promiseWrapper(async (req, res) => {
   const token = await account.generateToken();
   RespondLoginInfo(token, res, account.userId);
 
-  logInfo("Login success");
+  "login".console("success");
 });
 
 /**
@@ -50,5 +49,5 @@ export const logout = promiseWrapper(async (req, res) => {
   res.clearCookie("access_token");
   res.redirect("/");
 
-  logInfo("Logout success");
+  "logout".console("success");
 });

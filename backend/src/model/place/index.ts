@@ -2,7 +2,7 @@ import { Model, model, Types } from "mongoose";
 import PlaceListSchema from "./schema";
 import PlaceListDocument from "./document";
 
-interface PlaceInfo {
+interface PlaceListInfo {
   title: string;
   placeList: Array<string>;
   group?: string;
@@ -11,7 +11,7 @@ interface PlaceInfo {
 interface PlaceListModel extends Model<PlaceListDocument> {
   createPlaceList(
     authorId: string,
-    placeInfo: PlaceInfo
+    placeListInfo: PlaceListInfo
   ): Promise<PlaceListDocument>;
   findByAuthorId(authorId: string): Promise<Array<PlaceListDocument>>;
   findByGroup(authorId: string, group: string): Promise<PlaceListDocument>;
@@ -20,6 +20,7 @@ interface PlaceListModel extends Model<PlaceListDocument> {
     ids: Array<Types.ObjectId>,
     group: string
   ): Promise<Array<PlaceListDocument>>;
+  deleteGroup(group: string): Promise<Array<PlaceListDocument>>;
 }
 
 const PlaceList: PlaceListModel = model<PlaceListDocument, PlaceListModel>(

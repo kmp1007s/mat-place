@@ -1,5 +1,4 @@
 import { promiseWrapper, errorResponse } from "lib/error";
-import { logInfo } from "lib/log";
 import accountModel from "model/account";
 import * as errorType from "errorType";
 
@@ -20,7 +19,7 @@ export const readProfile = promiseWrapper(async (req, res) => {
     createdAt: account.createdAt,
   });
 
-  logInfo("Get profile success");
+  "get profile".console("success");
 });
 
 /**
@@ -46,5 +45,5 @@ export const updateProfile = promiseWrapper(async (req, res) => {
     createdAt: account.createdAt,
   });
 
-  logInfo("Update profile success");
+  "update profile".console("success");
 });

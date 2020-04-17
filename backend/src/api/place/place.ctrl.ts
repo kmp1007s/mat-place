@@ -1,5 +1,4 @@
 import { promiseWrapper, errorResponse } from "lib/error";
-import { logInfo } from "lib/log";
 import placeListModel from "model/place";
 import * as errorType from "errorType";
 
@@ -12,7 +11,7 @@ export const readPlaceList = promiseWrapper(async (req, res) => {
   const placeList = await placeListModel.findByAuthorId(userId);
 
   res.json(placeList);
-  logInfo("readPlaceList success");
+  "read place list".console("success");
 });
 
 /**
@@ -24,7 +23,7 @@ export const cretePlaceList = promiseWrapper(async (req, res) => {
   const placeList = await placeListModel.createPlaceList(userId, req.body);
 
   res.json(placeList);
-  logInfo("createPlacList success");
+  "create place list".console("success");
 });
 
 /**
@@ -37,7 +36,7 @@ export const readByGroup = promiseWrapper(async (req, res) => {
   const placeList = await placeListModel.findByGroup(userId, name);
 
   res.json(placeList);
-  logInfo("readByGroup success");
+  "read by group".console("success");
 });
 
 /**
@@ -50,5 +49,17 @@ export const updateGroup = promiseWrapper(async (req, res) => {
   const placeList = await placeListModel.updateGroup(userId, ids, group);
 
   res.json(placeList);
-  logInfo("updateGroup success");
+  "update group".console("success");
+});
+
+/**
+ * [DELETE] /group/:name - 그룹 삭제 (none으로 설정)
+ */
+export const deleteGroup = promiseWrapper(async (req, res) => {
+  const { name } = req.params;
+
+  const placeList = await placeListModel.deleteGroup(name);
+
+  res.json(placeList);
+  "delete group".console("success");
 });

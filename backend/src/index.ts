@@ -11,7 +11,7 @@ const MONGO_URI = process.env.MONGO_URI;
 const COOKIE_SECRET = process.env.COOKIE_SECRET;
 
 import api from "./api";
-import { logRoutesInfoMiddleWare, logInfo } from "./lib/log";
+import { logRoutesInfoMiddleWare } from "./lib/log";
 import { errorMiddleWare } from "./lib/error";
 import { jwtMiddleWare } from "./lib/jwt";
 
@@ -20,12 +20,12 @@ mongoose.Promise = global.Promise; // Node Promise
 mongoose
   .connect(MONGO_URI, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
   })
-  .then(response => {
+  .then((response) => {
     console.log("MongoDB Connected");
   })
-  .catch(e => console.error(e));
+  .catch((e) => console.error(e));
 
 app
   .use(bodyParser.urlencoded({ extended: false }))
@@ -37,5 +37,5 @@ app
   .use(errorMiddleWare);
 
 app.listen(PORT, () => {
-  logInfo(`Server is Listening on ${PORT}`);
+  `Server is Listening on ${PORT}`.console("info");
 });
