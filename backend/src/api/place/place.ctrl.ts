@@ -3,12 +3,13 @@ import placeListModel from "model/place";
 import * as errorType from "errorType";
 
 /**
- * [GET] /list - 맛집 리스트 전체 조회
+ * [GET] /list?group=... - 맛집 리스트 전체 조회
  */
 export const readPlaceList = promiseWrapper(async (req, res) => {
   const { userId } = req.user;
+  const group = req.query.group || "none";
 
-  const placeList = await placeListModel.findByAuthorId(userId);
+  const placeList = await placeListModel.getPlaceList(userId, group);
 
   res.json(placeList);
   "read place list".console("success");
@@ -27,20 +28,7 @@ export const cretePlaceList = promiseWrapper(async (req, res) => {
 });
 
 /**
- * [GET group/:name - 그룹명으로 맛집 리스트 가져오기]
- */
-export const readByGroup = promiseWrapper(async (req, res) => {
-  const { userId } = req.user;
-  const { name } = req.params;
-
-  const placeList = await placeListModel.findByGroup(userId, name);
-
-  res.json(placeList);
-  "read by group".console("success");
-});
-
-/**
- * [PATCH] /group - 그룹명 수정하기
+ * [PATCH] /group - 그룹 수정하기
  */
 export const updateGroup = promiseWrapper(async (req, res) => {
   const { userId } = req.user;

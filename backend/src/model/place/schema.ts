@@ -28,11 +28,7 @@ PlaceListSchema.statics.createPlaceList = function (authorId, placeListInfo) {
   }).save();
 };
 
-PlaceListSchema.statics.findByAuthorId = function (authorId) {
-  return this.find({ authorId });
-};
-
-PlaceListSchema.statics.findByGroup = function (authorId, group) {
+PlaceListSchema.statics.getPlaceList = function (authorId, group = "none") {
   return this.find({ authorId, group });
 };
 

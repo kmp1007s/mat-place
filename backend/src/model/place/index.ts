@@ -13,8 +13,10 @@ interface PlaceListModel extends Model<PlaceListDocument> {
     authorId: string,
     placeListInfo: PlaceListInfo
   ): Promise<PlaceListDocument>;
-  findByAuthorId(authorId: string): Promise<Array<PlaceListDocument>>;
-  findByGroup(authorId: string, group: string): Promise<PlaceListDocument>;
+  getPlaceList(
+    authorId: string,
+    group?: string
+  ): Promise<Array<PlaceListDocument>>;
   updateGroup(
     authorId: string,
     ids: Array<Types.ObjectId>,

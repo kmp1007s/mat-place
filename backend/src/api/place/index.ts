@@ -7,7 +7,6 @@ place.use(loginMiddleWare);
 
 place.get("/list", placeCtrl.readPlaceList);
 place.post("/list", placeCtrl.cretePlaceList);
-place.get("/group/:name", placeCtrl.readByGroup);
 place.patch("/group", placeCtrl.updateGroup);
 place.delete("/group/:name", placeCtrl.deleteGroup);
 
