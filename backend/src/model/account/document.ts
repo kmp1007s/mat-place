@@ -1,7 +1,7 @@
 import { Document } from "mongoose";
 
 // document type정의
-interface AccountDocument extends Document {
+export default interface AccountDocument extends Document {
   // properties
   userId: string;
   pwd: string;
@@ -11,5 +11,3 @@ interface AccountDocument extends Document {
   // instance methods (methods)
   generateToken(): Promise<string>;
 }
-
-export default AccountDocument;

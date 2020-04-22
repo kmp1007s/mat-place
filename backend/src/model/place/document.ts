@@ -9,11 +9,9 @@ import { Document } from "mongoose";
 //   place_url: string;
 // }
 
-interface PlaceListDocument extends Document {
+export default interface PlaceListDocument extends Document {
   authorId: string;
   title: string;
   placeList: Array<String>;
   group: string;
 }
-
-export default PlaceListDocument;
