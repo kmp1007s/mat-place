@@ -1,18 +1,20 @@
-import { Model, model } from "mongoose";
+import { Model, model, Types } from "mongoose";
 import GroupSchema from "./schema";
 import GroupDocument from "./document";
 
 interface GroupModel extends Model<GroupDocument> {
-  getGroupNames(authorId: string): Promise<Array<GroupDocument>>;
-  getPlaceListIdsByGroups(
+  createGroup(authorId: string, groupName: string): Promise<GroupDocument>;
+  getGroupNames(authorId: string): Promise<Array<string>>;
+  getPlaceListIdsByGroupName(
     authorId: string,
     groupName: string
-  ): Promise<GroupDocument>;
-  updatePlaceListIdsByGroups(
+  ): Promise<Array<Types.ObjectId>>;
+  updatePlaceListIdsByGroupName(
     authorId: string,
     groupName: string,
-    placeListIds: string
+    placeListIds: Array<Types.ObjectId>
   ): Promise<GroupDocument>;
+  deleteGroup(authorId: string, groupName: string): Promise<void>;
 }
 
 const Group: GroupModel = model<GroupDocument, GroupModel>(

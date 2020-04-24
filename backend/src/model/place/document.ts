@@ -12,6 +12,6 @@ import { Document } from "mongoose";
 export default interface PlaceListDocument extends Document {
   authorId: string;
   title: string;
-  placeList: Array<String>;
+  placeIds: Array<String>;
   group: string;
 }

@@ -5,8 +5,8 @@ import loginMiddleWare from "lib/login";
 const place = Router();
 place.use(loginMiddleWare);
 
-place.get("/list", placeCtrl.readPlaceList);
-place.post("/list", placeCtrl.cretePlaceList);
+place.get("/", placeCtrl.readPlaceList);
+place.post("/", placeCtrl.cretePlaceList);
 place.patch("/group", placeCtrl.updateGroup);
 place.delete("/group/:name", placeCtrl.deleteGroup);
 

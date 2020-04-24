@@ -1,22 +1,25 @@
 import { promiseWrapper, errorResponse } from "lib/error";
 import placeListModel from "model/place";
+import groupModel from "model/group";
 import * as errorType from "errorType";
 
 /**
- * [GET] /list?group=... - 맛집 리스트 전체 조회
+ * [GET] /place-lists?group=... - 맛집 리스트 전체 조회
  */
 export const readPlaceList = promiseWrapper(async (req, res) => {
   const { userId } = req.user;
-  const group = req.query.group || "none";
+  const { group } = req.query;
 
-  const placeList = await placeListModel.getPlaceList(userId, group);
+  const placeList = group
+    ? await placeListModel.getPlaceListByAuthorId(userId, group)
+    : await placeListModel.getPlaceListByAuthorId(userId);
 
   res.json(placeList);
   "read place list".console("success");
 });
 
 /**
- * [POST] /list - 맛집 리스트 생성
+ * [POST] /place-lists - 맛집 리스트 생성
  */
 export const cretePlaceList = promiseWrapper(async (req, res) => {
   const { userId } = req.user;

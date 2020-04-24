@@ -14,7 +14,7 @@ import { Schema } from "mongoose";
 const PlaceListSchema: Schema = new Schema({
   authorId: String,
   title: String,
-  placeList: [String], // Place 정보 전체 관리가 아닌 Place Id만 관리
+  placeIds: [String], // Place 정보 전체 관리가 아닌 Place Id만 관리
   group: {
     type: String,
     default: "none",
@@ -28,7 +28,8 @@ PlaceListSchema.statics.createPlaceList = function (authorId, placeListInfo) {
   }).save();
 };
 
-PlaceListSchema.statics.getPlaceList = function (authorId, group = "none") {
+PlaceListSchema.statics.getPlaceListByAuthorId = function (authorId, group) {
+  if (!group) return this.find({ authorId });
   return this.find({ authorId, group });
 };
 
