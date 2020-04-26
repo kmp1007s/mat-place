@@ -1,26 +1,26 @@
 import { Schema } from "mongoose";
 
 const GroupSchema = new Schema({
-  authorId: String,
+  userId: String,
   groupName: String,
   placeListIds: [Schema.Types.ObjectId],
 });
 
-GroupSchema.statics.createGroup = async function (authorId, groupName) {
-  const exists = await this.find({ authorId, groupName });
+GroupSchema.statics.createGroup = async function (userId, groupName) {
+  const exists = await this.find({ userId, groupName });
 
   if (!exists)
     return new this({
-      authorId,
+      userId,
       groupName,
       placeListIds: [],
     }).save();
 };
 
-GroupSchema.statics.getGroupNames = function (authorId) {
+GroupSchema.statics.getGroupNames = function (userId) {
   return new Promise(async (resolve, reject) => {
     const groupNames = [];
-    const groupDocs = await this.find({ authorId });
+    const groupDocs = await this.find({ userId });
     groupDocs.foreach((groupDoc) => {
       groupNames.push(groupDoc);
     });
@@ -28,30 +28,27 @@ GroupSchema.statics.getGroupNames = function (authorId) {
   });
 };
 
-GroupSchema.statics.getPlaceListIdsByGroupName = function (
-  authorId,
-  groupName
-) {
+GroupSchema.statics.getPlaceListIdsByGroupName = function (userId, groupName) {
   return new Promise(async (resolve, reject) => {
-    const groupDoc = await this.findOne({ authorId, groupName });
-    resolve(groupDoc.placeListIds);
+    const groupDoc = await this.findOne({ userId, groupName });
+    if (groupDoc) resolve(groupDoc.placeListIds);
   });
 };
 
 GroupSchema.statics.updatePlaceListIdsByGroupName = function (
-  authorId,
+  userId,
   groupName,
   placeListIds
 ) {
   return this.findOneAndUpdate(
-    { authorId, groupName },
+    { userId, groupName },
     { placeListIds },
     { new: true }
   );
 };
 
-GroupSchema.statics.deleteGroup = async function (authorId, groupName) {
-  await this.deleteOne({ authorId, groupName });
+GroupSchema.statics.deleteGroup = async function (userId, groupName) {
+  await this.deleteOne({ userId, groupName });
 };
 
 export default GroupSchema;

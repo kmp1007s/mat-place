@@ -3,22 +3,23 @@ import PlaceListSchema from "./schema";
 import PlaceListDocument from "./document";
 
 interface PlaceListInfo {
+  userId: string;
   title: string;
   placeList: Array<string>;
-  group?: string;
 }
 
 interface PlaceListModel extends Model<PlaceListDocument> {
-  createPlaceList(
-    authorId: string,
-    placeListInfo: PlaceListInfo
-  ): Promise<PlaceListDocument>;
-  getPlaceListByAuthorId(
-    authorId: string,
+  createPlaceList(placeListInfo: PlaceListInfo): Promise<PlaceListDocument>;
+  getPlaceListByGroups(
+    userId: string,
+    group: string
+  ): Promise<Array<PlaceListDocument>>;
+  getPlaceListByUserId(
+    userId: string,
     group?: string
   ): Promise<Array<PlaceListDocument>>;
   updateGroup(
-    authorId: string,
+    userId: string,
     ids: Array<Types.ObjectId>,
     group: string
   ): Promise<Array<PlaceListDocument>>;

@@ -1,4 +1,5 @@
 import { Schema } from "mongoose";
+import groupModel from "model/group";
 
 // /* 장소 Schema Kakao API 기준 */
 // export const PlaceSchema: Schema = new Schema({
@@ -12,7 +13,7 @@ import { Schema } from "mongoose";
 
 /* 장소 리스트 Schema, 그룹별로 관리할 수 있음 */
 const PlaceListSchema: Schema = new Schema({
-  authorId: String,
+  userId: String,
   title: String,
   placeIds: [String], // Place 정보 전체 관리가 아닌 Place Id만 관리
   group: {
@@ -21,21 +22,25 @@ const PlaceListSchema: Schema = new Schema({
   },
 });
 
-PlaceListSchema.statics.createPlaceList = function (authorId, placeListInfo) {
-  return new this({
-    authorId,
-    ...placeListInfo,
-  }).save();
+PlaceListSchema.statics.createPlaceList = function (placeListInfo) {
+  return new this(placeListInfo).save();
 };
 
-PlaceListSchema.statics.getPlaceListByAuthorId = function (authorId, group) {
-  if (!group) return this.find({ authorId });
-  return this.find({ authorId, group });
+PlaceListSchema.statics.getPlaceListByGroups = async function (userId, group) {
+  const placeListIds = await groupModel.getPlaceListIdsByGroupName(
+    userId,
+    group
+  );
+  return placeListIds ? this.find({ _id: { $in: placeListIds } }) : [];
 };
 
-PlaceListSchema.statics.updateGroup = async function (authorId, ids, group) {
-  await this.updateMany({ authorId, _id: { $in: ids } }, { $set: { group } });
-  return this.find({ authorId, _id: { $in: ids } });
+PlaceListSchema.statics.getPlaceListByUserId = function (userId) {
+  return this.find({ userId });
+};
+
+PlaceListSchema.statics.updateGroup = async function (userId, ids, group) {
+  await this.updateMany({ userId, _id: { $in: ids } }, { $set: { group } });
+  return this.find({ userId, _id: { $in: ids } });
 };
 
 PlaceListSchema.statics.deleteGroup = async function (group) {

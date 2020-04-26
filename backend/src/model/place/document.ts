@@ -10,8 +10,7 @@ import { Document } from "mongoose";
 // }
 
 export default interface PlaceListDocument extends Document {
-  authorId: string;
+  userId: string;
   title: string;
   placeIds: Array<String>;
-  group: string;
 }
