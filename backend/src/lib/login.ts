@@ -8,7 +8,6 @@ export default function loginMiddleWare(
   next: NextFunction
 ) {
   "Login confirmed".console();
-  console.log("Login confirmed");
   // 로그인이 안 된 경우
   if (!req.user)
     return res.status(401).json(errorResponse(errorType.NOT_LOGGED_IN));

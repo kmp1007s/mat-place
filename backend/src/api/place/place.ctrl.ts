@@ -2,7 +2,6 @@ import { promiseWrapper, errorResponse } from "lib/error";
 import placeListModel from "model/place";
 import groupModel from "model/group";
 import * as errorType from "errorType";
-import PlaceListDocument from "model/place/document";
 
 /**
  * [GET] /place-lists?group=... - 맛집 리스트 전체 조회
@@ -12,8 +11,8 @@ export const readPlaceList = promiseWrapper(async (req, res) => {
   const { group } = req.query;
 
   const placeLists = group
-    ? placeListModel.getPlaceListByGroups(userId, group)
-    : placeListModel.getPlaceListByUserId(userId);
+    ? await placeListModel.getPlaceListByGroups(userId, group)
+    : await placeListModel.getPlaceListByUserId(userId);
 
   res.json(placeLists);
   "read place list".console("success");
@@ -40,7 +39,7 @@ export const cretePlaceList = promiseWrapper(async (req, res) => {
 export const createGroup = promiseWrapper(async (req, res) => {
   const { userId } = req.user;
   const { name } = req.body;
-  const group = groupModel.createGroup(userId, name);
+  const group = await groupModel.createGroup(userId, name);
 
   if (!group) {
     res.status(409);
@@ -56,7 +55,7 @@ export const createGroup = promiseWrapper(async (req, res) => {
 export const updateGroup = promiseWrapper(async (req, res) => {
   const { userId } = req.user;
   const { name } = req.params;
-  const placeListIds = req.body;
+  const { placeListIds } = req.body;
 
   const placeList = await groupModel.updatePlaceListIdsByGroupName(
     userId,

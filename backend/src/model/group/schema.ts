@@ -21,8 +21,8 @@ GroupSchema.statics.getGroupNames = function (userId) {
   return new Promise(async (resolve, reject) => {
     const groupNames = [];
     const groupDocs = await this.find({ userId });
-    groupDocs.foreach((groupDoc) => {
-      groupNames.push(groupDoc);
+    groupDocs.forEach((groupDoc) => {
+      groupNames.push(groupDoc.groupName);
     });
     resolve(groupNames);
   });

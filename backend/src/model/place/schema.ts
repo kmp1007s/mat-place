@@ -16,10 +16,6 @@ const PlaceListSchema: Schema = new Schema({
   userId: String,
   title: String,
   placeIds: [String], // Place 정보 전체 관리가 아닌 Place Id만 관리
-  group: {
-    type: String,
-    default: "none",
-  },
 });
 
 PlaceListSchema.statics.createPlaceList = function (placeListInfo) {
