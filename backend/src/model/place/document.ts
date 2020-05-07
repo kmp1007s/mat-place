@@ -13,4 +13,5 @@ export default interface PlaceListDocument extends Document {
   userId: string;
   title: string;
   placeIds: Array<String>;
+  createdAt: Date;
 }

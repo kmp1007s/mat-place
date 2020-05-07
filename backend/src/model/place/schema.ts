@@ -16,13 +16,14 @@ const PlaceListSchema: Schema = new Schema({
   userId: String,
   title: String,
   placeIds: [String], // Place 정보 전체 관리가 아닌 Place Id만 관리
+  createdAt: { type: Date, default: Date.now },
 });
 
 PlaceListSchema.statics.createPlaceList = function (placeListInfo) {
   return new this(placeListInfo).save();
 };
 
-PlaceListSchema.statics.getPlaceListByGroups = async function (userId, group) {
+PlaceListSchema.statics.getPlaceListsByGroups = async function (userId, group) {
   const placeListIds = await groupModel.getPlaceListIdsByGroupName(
     userId,
     group
@@ -30,18 +31,8 @@ PlaceListSchema.statics.getPlaceListByGroups = async function (userId, group) {
   return placeListIds ? this.find({ _id: { $in: placeListIds } }) : [];
 };
 
-PlaceListSchema.statics.getPlaceListByUserId = function (userId) {
+PlaceListSchema.statics.getPlaceListsByUserId = function (userId) {
   return this.find({ userId });
-};
-
-PlaceListSchema.statics.updateGroup = async function (userId, ids, group) {
-  await this.updateMany({ userId, _id: { $in: ids } }, { $set: { group } });
-  return this.find({ userId, _id: { $in: ids } });
-};
-
-PlaceListSchema.statics.deleteGroup = async function (group) {
-  await this.updateMany({ group }, { group: "none" });
-  return this.find({ group: "none" });
 };
 
 export default PlaceListSchema;

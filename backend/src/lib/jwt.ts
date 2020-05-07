@@ -41,7 +41,7 @@ export async function jwtMiddleWare(
   res: Response,
   next: NextFunction
 ) {
-  const token: string | undefined = req.signedCookies.access_token;
+  const token: string | undefined = req.signedCookies.token;
   if (!token) return next();
 
   try {
@@ -52,7 +52,7 @@ export async function jwtMiddleWare(
       const { _id, userId } = decoded;
       const freshToken = await generateToken({ _id, userId });
 
-      res.cookie("access_token", freshToken, signOption());
+      res.cookie("token", freshToken, signOption());
     }
 
     req.user = decoded;

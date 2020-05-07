@@ -3,16 +3,24 @@ import GroupSchema from "./schema";
 import GroupDocument from "./document";
 
 interface GroupModel extends Model<GroupDocument> {
-  createGroup(userId: string, groupName: string): Promise<GroupDocument>;
+  createGroup(
+    userId: string,
+    groupName: string,
+    placeListIds?: Array<Types.ObjectId>
+  ): Promise<GroupDocument>;
+  groupExists(userId: string, groupName: string): Promise<boolean>;
   getGroupNames(userId: string): Promise<Array<string>>;
   getPlaceListIdsByGroupName(
     userId: string,
     groupName: string
   ): Promise<Array<Types.ObjectId>>;
-  updatePlaceListIdsByGroupName(
+  updateGroup(
     userId: string,
     groupName: string,
-    placeListIds: Array<Types.ObjectId>
+    updateData: {
+      nameUpdateTo?: string;
+      placeListIds?: Array<Types.ObjectId>;
+    }
   ): Promise<GroupDocument>;
   deleteGroup(userId: string, groupName: string): Promise<void>;
 }

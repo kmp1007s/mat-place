@@ -1,9 +1,5 @@
-import { logError } from "./log";
+import { logFail } from "./log";
 import { Request, Response, NextFunction, RequestHandler } from "express";
-
-interface ErrorResponse {
-  error: string;
-}
 
 type AsyncHandler = (
   req: Request,
@@ -11,8 +7,8 @@ type AsyncHandler = (
   next?: NextFunction
 ) => Promise<any>;
 
-export function errorResponse(errorMessage: string): ErrorResponse {
-  errorMessage.console("error");
+export function errorResponse(errorMessage: string): { error: string } {
+  // errorMessage.console("error");
   return {
     error: errorMessage,
   };
@@ -24,7 +20,7 @@ export function errorMiddleWare(
   res: Response,
   next: NextFunction
 ) {
-  logError(err.stack);
+  logFail(err.stack);
   res.status(500).json(errorResponse(err.message));
 }
 

@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from "express";
 
 declare global {
   interface String {
-    console(type?: "error" | "info" | "success" | "default"): void;
+    console(type?: "fail" | "info" | "success" | "default"): void;
   }
 }
 
@@ -11,11 +11,11 @@ declare global {
  * String.console("success")와 같이 접근 가능
  */
 String.prototype.console = function (
-  type: "error" | "info" | "success" | "default" = "default"
+  type: "fail" | "info" | "success" | "default" = "default"
 ) {
   switch (type) {
-    case "error":
-      logError(this);
+    case "fail":
+      logFail(this);
       break;
     case "info":
       logInfo(this);
@@ -66,7 +66,7 @@ export function logRoutesInfoMiddleWare(
   res: Response,
   next: NextFunction
 ) {
-  console.log(colors.yellow(`${req.url}[${req.method}]`));
+  `${req.url}[${req.method}]`.console("info");
   next();
 }
 
@@ -74,7 +74,7 @@ export function logInfo(msg: string) {
   console.log(colors.yellow(msg + " info"));
 }
 
-export function logError(msg: string) {
+export function logFail(msg: string) {
   console.log(colors.red(msg + " error"));
 }
 
