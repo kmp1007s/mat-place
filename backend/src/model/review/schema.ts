@@ -9,8 +9,8 @@ const ReviewSchema: Schema = new Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
-ReviewSchema.statics.createReview = function (reviewData) {
-  return new this(reviewData).save();
+ReviewSchema.statics.createReview = function (userId, reviewData) {
+  return new this({ userId, reviewData }).save();
 };
 
 ReviewSchema.statics.getAllReviews = function () {

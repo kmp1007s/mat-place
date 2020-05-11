@@ -3,13 +3,15 @@ import ReviewSchema from "./schema";
 import ReviewDocument from "./document";
 
 interface ReviewModel extends Model<ReviewDocument> {
-  createReview(reviewData: {
-    userId: string;
-    title: string;
-    content: string;
-    placeId: string;
-    rates: number;
-  }): Promise<ReviewDocument>;
+  createReview(
+    userId: string,
+    reviewData: {
+      title: string;
+      content: string;
+      placeId: string;
+      rates: number;
+    }
+  ): Promise<ReviewDocument>;
   getAllReviews(): Promise<Array<ReviewDocument>>;
   getReviewById(_id: string | Types.ObjectId): Promise<ReviewDocument>;
   updateReviewById(

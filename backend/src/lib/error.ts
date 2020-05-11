@@ -1,33 +1,75 @@
-import { logFail } from "./log";
 import { Request, Response, NextFunction, RequestHandler } from "express";
 
-type AsyncHandler = (
+type HandlerUseAsync = (
   req: Request,
   res: Response,
   next?: NextFunction
 ) => Promise<any>;
 
-export function errorResponse(errorMessage: string): { error: string } {
-  // errorMessage.console("error");
-  return {
-    error: errorMessage,
-  };
+class ErrorResponse {
+  message: string;
+  constructor(message: string) {
+    this.message = message;
+  }
 }
 
-export function errorMiddleWare(
+type ErrorStatus = 400 | 401 | 403 | 404 | 409;
+
+function sendResponse(res: Response, status: ErrorStatus, message: string) {
+  res.status(status).json(new ErrorResponse(message));
+  message.log("fail");
+}
+
+export function extendResponse(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  res.badRequest = (reason) => {
+    const BAD_REQUEST_MESSAGE = reason;
+    sendResponse(res, 400, BAD_REQUEST_MESSAGE);
+  };
+
+  res.unauthorized = (specificallyReason?) => {
+    const UNAUTHORIZED_MESSAGE =
+      specificallyReason || `Cannot identify the user. Not logged in`;
+    sendResponse(res, 401, UNAUTHORIZED_MESSAGE);
+  };
+
+  res.forbidden = (specificallyReason?) => {
+    const FORBIDDEN_MESSAGE = specificallyReason || `Authorization denied`;
+    sendResponse(res, 403, FORBIDDEN_MESSAGE);
+  };
+
+  res.notFound = (object) => {
+    const NOT_FOUND_MESSAGE = `${object} Not Found`;
+    sendResponse(res, 404, NOT_FOUND_MESSAGE);
+  };
+
+  res.conflict = (object) => {
+    const CONFLICT_MESSAGE = `${object} Conflict`;
+    sendResponse(res, 409, CONFLICT_MESSAGE);
+  };
+
+  next();
+}
+
+export function handleErrors(
   err: any,
   req: Request,
   res: Response,
   next: NextFunction
 ) {
-  logFail(err.stack);
-  res.status(500).json(errorResponse(err.message));
+  "Handle Erros".log();
+  `${err.stack}`.log("fail");
+  res.status(500).json(new ErrorResponse(err.message));
 }
 
-export function promiseWrapper(fn: AsyncHandler): RequestHandler {
-  /* Promise를 사용하는 라우트 미들웨어를 반환 */
+export function asyncWrapper(fn: HandlerUseAsync): RequestHandler {
   return function (req: Request, res: Response, next: NextFunction) {
-    // promiseWrapper를 호출하여 반환된 함수를 RequestHandler로써 호출하고 promiseWrapper로 전달된 Request, Response, NextFunction 객체를 넘겨주어 호출하는 방식
-    fn(req, res, next).catch(next);
+    (async (req, res, next) => {
+      await fn(req, res, next);
+      next();
+    })(req, res, next).catch(next);
   };
 }

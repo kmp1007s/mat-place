@@ -5,10 +5,15 @@ import GroupDocument from "./document";
 interface GroupModel extends Model<GroupDocument> {
   createGroup(
     userId: string,
-    groupName: string,
-    placeListIds?: Array<Types.ObjectId>
+    group: {
+      name: string;
+      placeListIds?: Array<Types.ObjectId | string>;
+    }
   ): Promise<GroupDocument>;
-  groupExists(userId: string, groupName: string): Promise<boolean>;
+  getGroupByGroupName(
+    userId: string,
+    groupName: string
+  ): Promise<GroupDocument>;
   getGroupNames(userId: string): Promise<Array<string>>;
   getPlaceListIdsByGroupName(
     userId: string,
@@ -17,7 +22,7 @@ interface GroupModel extends Model<GroupDocument> {
   updateGroup(
     userId: string,
     groupName: string,
-    updateData: {
+    toUpdate: {
       nameUpdateTo?: string;
       placeListIds?: Array<Types.ObjectId>;
     }

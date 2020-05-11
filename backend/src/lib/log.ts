@@ -1,83 +1,43 @@
 import * as colors from "colors";
 import { Request, Response, NextFunction } from "express";
 
+type LogTypes = "info" | "success" | "fail";
+
 declare global {
   interface String {
-    console(type?: "fail" | "info" | "success" | "default"): void;
+    log(type?: LogTypes): void;
   }
 }
+
+const logInfo = (msg: string) => {
+  console.log(colors.yellow("Info: " + msg));
+};
+
+const logFail = (msg: string) => {
+  console.log(colors.red("Fail: " + msg));
+};
+
+const logSuccess = (msg: string) => {
+  console.log(colors.green("Success: " + msg));
+};
 
 /**
  * String.console("success")와 같이 접근 가능
  */
-String.prototype.console = function (
-  type: "fail" | "info" | "success" | "default" = "default"
-) {
-  switch (type) {
-    case "fail":
-      logFail(this);
-      break;
+String.prototype.log = function (type: LogTypes) {
+  switch (type || "default") {
     case "info":
-      logInfo(this);
-      break;
+      return logInfo(this);
     case "success":
-      logSuccess(this);
-      break;
+      return logSuccess(this);
+    case "fail":
+      return logFail(this);
     default:
-      console.log(this);
+      return console.log(this);
   }
 };
 
-/**
- * 아래는 String.console().success() 다음과 같이 접근 가능 (가독성의 문제로 위의 코드 채택)
- */
-// declare global {
-//   interface String {
-//     console(): StringConsole;
-//   }
-// }
-
-// interface StringConsole {
-//   error(): void;
-//   info(): void;
-//   success(): void;
-// }
-
-// String.prototype.console = function () {
-//   const stringValue = this;
-//   return {
-//     error: () => {
-//       logError(stringValue);
-//     },
-//     info: () => {
-//       logInfo(stringValue);
-//     },
-//     success: () => {
-//       logSuccess(stringValue);
-//     },
-//     default: () => {
-//       console.log(stringValue);
-//     },
-//   };
-// };
-
-export function logRoutesInfoMiddleWare(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
-  `${req.url}[${req.method}]`.console("info");
+export function logRoutesInfo(req: Request, res: Response, next: NextFunction) {
+  `${req.url}[${req.method}]`.log("info");
   next();
-}
-
-export function logInfo(msg: string) {
-  console.log(colors.yellow(msg + " info"));
-}
-
-export function logFail(msg: string) {
-  console.log(colors.red(msg + " error"));
-}
-
-export function logSuccess(msg: string) {
-  console.log(colors.green(msg + " success"));
 }

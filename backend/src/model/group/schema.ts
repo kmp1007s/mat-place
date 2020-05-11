@@ -3,20 +3,12 @@ import { Schema } from "mongoose";
 const GroupSchema = new Schema({
   userId: String,
   groupName: String,
-  placeListIds: [Schema.Types.ObjectId],
+  placeListIds: { type: [Schema.Types.ObjectId], default: [] },
   createdAt: { type: Date, default: Date.now },
 });
 
-GroupSchema.statics.createGroup = async function (
-  userId,
-  groupName,
-  placeListIds
-) {
-  return new this({
-    userId,
-    groupName,
-    placeListIds: placeListIds || [],
-  }).save();
+GroupSchema.statics.createGroup = async function (userId, group) {
+  return new this({ userId, group }).save();
 };
 
 GroupSchema.statics.getGroupNames = function (userId) {
@@ -30,26 +22,26 @@ GroupSchema.statics.getGroupNames = function (userId) {
   });
 };
 
-GroupSchema.statics.groupExists = async function (userId, groupName) {
-  const groupNames = await this.getGroupNames(userId);
-  return groupNames.includes(groupName);
+GroupSchema.statics.getGroupByGroupName = function (userId, groupName) {
+  return this.findOne({ userId, groupName });
 };
 
-GroupSchema.statics.getPlaceListIdsByGroupName = function (userId, groupName) {
-  return new Promise(async (resolve, reject) => {
-    const groupDoc = await this.findOne({ userId, groupName });
-    if (groupDoc) resolve(groupDoc.placeListIds);
-  });
+GroupSchema.statics.getPlaceListIdsByGroupName = async function (
+  userId,
+  groupName
+) {
+  const groupDoc = await this.findOne({ userId, groupName });
+  if (groupDoc) return groupDoc.placeListIds;
 };
 
-GroupSchema.statics.updateGroup = function (userId, groupName, updateData) {
-  return this.findOneAndUpdate({ userId, groupName }, updateData, {
+GroupSchema.statics.updateGroup = function (userId, groupName, toUpdate) {
+  return this.findOneAndUpdate({ userId, groupName }, toUpdate, {
     new: true,
   });
 };
 
-GroupSchema.statics.deleteGroup = async function (userId, groupName) {
-  await this.deleteOne({ userId, groupName });
+GroupSchema.statics.deleteGroup = function (userId, groupName) {
+  return this.deleteOne({ userId, groupName });
 };
 
 export default GroupSchema;

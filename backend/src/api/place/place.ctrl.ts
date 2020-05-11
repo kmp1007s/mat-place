@@ -1,99 +1,249 @@
-import { promiseWrapper, errorResponse } from "lib/error";
+import Joi = require("@hapi/joi");
+import { Types } from "mongoose";
 import placeListModel from "model/place";
+import accountModel from "model/account";
 import groupModel from "model/group";
-import * as errorType from "errorType";
+import { asyncWrapper } from "lib/error";
 
-function groupNotFoundResponse(res) {
-  res.status(404).json(errorResponse(errorType.notFound("Group")));
-  "couldn't find group".console("fail");
-}
+const { ObjectId } = Types;
 
-/**
- * [GET] /api/place-lists?group=... - 맛집 리스트 전체 조회
- */
-export const readPlaceList = promiseWrapper(async (req, res) => {
-  const { userId } = req.user;
-  const { group } = req.query;
-
-  let placeLists = null;
-
-  if (group) {
-    if (!(await groupModel.groupExists(userId, group)))
-      return groupNotFoundResponse(res);
-    placeLists = await placeListModel.getPlaceListsByGroups(userId, group);
-  } else placeLists = await placeListModel.getPlaceListsByUserId(userId);
-
-  res.json(placeLists);
-  "read place list".console("success");
-});
+const userIsCreator = (requestUserId: string, documentUserId: string) =>
+  requestUserId === documentUserId;
 
 /**
  * [POST] /api/place-lists - 맛집 리스트 생성
  */
-export const cretePlaceList = promiseWrapper(async (req, res) => {
+export const cretePlaceList = asyncWrapper(async (req, res) => {
   const { userId } = req.user;
 
-  const placeList = await placeListModel.createPlaceList({
-    userId,
-    ...req.body,
+  const requestSchema = Joi.object().keys({
+    title: Joi.string().required(),
+    placeIds: Joi.array().items(Joi.string()).required(),
   });
 
+  const { error } = requestSchema.validate(req.body);
+  if (error) return res.badRequest(error.message); // 리퀘스트 검증 실패
+
+  const placeList = await placeListModel.createPlaceList(userId, req.body);
+  res.status(201).json(placeList);
+});
+
+/**
+ * [GET] /api/place-lists/:id - 특정 맛집 리스트 조회
+ */
+export const getPlaceListById = asyncWrapper(async (req, res) => {
+  const { userId } = req.user;
+  const { id } = req.params;
+
+  if (!ObjectId.isValid(id)) return res.badRequest("Unexpected ObjectId"); // ObjectId 검증 실패
+
+  const placeList = await placeListModel.getPlaceListById(id);
+  if (!placeList) return res.notFound("PlaceList"); // PlaceList 찾기 실패
+
+  const placeListIsPrivate = !placeList.public;
+  const userCanReadPrivate = userId && userIsCreator(userId, placeList.userId);
+
+  if (placeListIsPrivate && !userCanReadPrivate)
+    // Private 문서를 가져올 권한이 없음
+    return res.forbidden(
+      "This place list is private. You don't have permission for this place list"
+    );
+
   res.json(placeList);
-  "create place list".console("success");
+});
+
+/**
+ * [GET] /api/place-lists/users/:id?group=groupName - 특정 유저의 맛집 리스트들을 가져옴
+ */
+export const getPlaceListsByUserId = asyncWrapper(async (req, res) => {
+  const { userId } = req.user;
+  const { id } = req.params;
+  const { group } = req.query;
+
+  const account = await accountModel.getAccountByUserId(id);
+  if (!account) return res.notFound("User"); // 유저 찾기 실패
+
+  let placeLists = [];
+  const getPrivatesToo = userId && userIsCreator(userId, id);
+
+  if (group) {
+    if (!(await groupModel.getGroupByGroupName(id, group)))
+      // 그룹 찾기 실패
+      return res.notFound("Group");
+
+    placeLists = getPrivatesToo
+      ? await placeListModel.getAllPlaceListsByGroups(id, group)
+      : await placeListModel.getPublicPlaceListsByGroups(id, group);
+  } else {
+    placeLists = getPrivatesToo
+      ? await placeListModel.getAllPlaceListsByUserId(id)
+      : await placeListModel.getPublicPlaceListsByUserId(id);
+  }
+  res.json(placeLists);
+});
+
+/**
+ * [PATCH] /api/place-lists/:id - 특정 맛집 리스트 수정
+ */
+export const updatePlaceListById = asyncWrapper(async (req, res) => {
+  const { userId } = req.user;
+  const { id } = req.params;
+
+  const requestSchema = Joi.object().keys({
+    title: Joi.string(),
+    placeIds: Joi.array().items(Joi.string()),
+  });
+
+  if (!ObjectId.isValid(id)) return res.badRequest("Unexpected ObjectId"); // ObjectId 검증 실패
+
+  let placeList = await placeListModel.getPlaceListById(id);
+
+  if (!placeList) return res.notFound("PlaceList"); // placeList 찾기 실패
+  if (!userIsCreator(userId, placeList.userId)) return res.forbidden(); // 수정 권한 없음
+  const { error } = requestSchema.validate(req.body);
+  if (error) return res.badRequest(error.message); // 리퀘스트 검증 실패
+
+  placeList = await placeListModel.updatePlaceListById(id, req.body);
+  res.json(placeList);
+});
+
+/**
+ * [DELETE] /api/place-lists/:id - 특정 맛집 리스트 삭제
+ */
+export const deletePlaceListById = asyncWrapper(async (req, res) => {
+  const { userId } = req.user;
+  const { id } = req.params;
+
+  if (!ObjectId.isValid(id)) return res.badRequest("Unexpected ObjectId"); // ObjectId 검증 실패
+
+  const placeList = await placeListModel.getPlaceListById(id);
+
+  if (!placeList) return res.notFound("PlaceList"); // PlaceList 찾기 실패
+  if (!userIsCreator(userId, placeList.userId)) return res.forbidden(); // 삭제 권한 없음
+
+  await placeListModel.deletePlaceListById(id);
+
+  res.status(204);
+});
+
+/**
+ * [POST] /api/place-lists/public/:id - 맛집 리스트를 공개로 전환
+ */
+export const makePlaceListPublic = asyncWrapper(async (req, res) => {
+  const { userId } = req.user;
+  const { id } = req.params;
+
+  if (!ObjectId.isValid(id)) return res.badRequest("Unexpected ObjectId"); // ObjectId 검증 실패
+
+  let placeList = await placeListModel.getPlaceListById(id);
+
+  if (!placeList) return res.notFound("PlaceList"); // PlaceList 찾기 실패
+  if (!userIsCreator(userId, id)) return res.forbidden(); // 수정 권한 없음
+
+  placeList = await placeListModel.makePlaceListPublic(id);
+  res.json(placeList);
+});
+
+/**
+ * [POST] /api/place-lists/private/:id - 맛집 리스트를 비공개로 전환
+ */
+export const makePlaceListPrivate = asyncWrapper(async (req, res) => {
+  const { userId } = req.user;
+  const { id } = req.params;
+
+  if (!ObjectId.isValid(id)) return res.badRequest("Unexpected ObjectId"); // ObjectId 검증 실패
+
+  let placeList = await placeListModel.getPlaceListById(id);
+
+  if (!placeList) return res.notFound("PlaceList"); // PlaceList 찾기 실패
+  if (!userIsCreator(userId, id)) return res.forbidden(); // 수정 권한 없음
+
+  placeList = await placeListModel.makePlaceListPrivate(id);
+  res.json(placeList);
 });
 
 /**
  * [POST] /api/place-lists/groups - 그룹 생성하기
  */
-export const createGroup = promiseWrapper(async (req, res) => {
+export const createGroup = asyncWrapper(async (req, res) => {
   const { userId } = req.user;
   const { name, placeListIds } = req.body;
 
-  if (await groupModel.groupExists(userId, name)) {
-    res.status(409).json(errorResponse(errorType.confilct("Group")));
-    return "group conflict".console("fail");
+  const requestSchema = Joi.object().keys({
+    name: Joi.string().required(),
+    placeListIds: Joi.array().items(Joi.string()),
+  });
+
+  const { error } = requestSchema.validate(req.body);
+  if (error) return res.badRequest(error.message); // 리퀘스트 검증 실패
+
+  for (let i = 0; placeListIds.length > 0 && i < placeListIds.length; i++) {
+    if (!ObjectId.isValid(placeListIds[i]))
+      // 그룹에 추가할 PlaceListId의 ObjectId 검증 실패
+      return res.badRequest("Unexpected ObjectId");
+    if (!placeListModel.getPlaceListById(placeListIds[i]))
+      // 그룹에 추가할 PlaceList를 찾지 못함
+      return res.badRequest(
+        "Result searching by place list's id is not exists"
+      );
   }
 
-  const group = placeListIds
-    ? await groupModel.createGroup(userId, name, placeListIds)
-    : await groupModel.createGroup(userId, name);
+  if (await groupModel.getGroupByGroupName(userId, name))
+    return res.conflict("Group"); // 그룹 충돌
 
-  res.json(group);
-  "create group".console("success");
+  const group = await groupModel.createGroup(userId, req.body);
+  res.status(201).json(group);
 });
 
 /**
  * [PATCH] /api/place-lists/groups/:name - 그룹 수정하기
  */
-export const updateGroup = promiseWrapper(async (req, res) => {
+export const updateGroup = asyncWrapper(async (req, res) => {
   const { userId } = req.user;
   const { name } = req.params;
-  const { nameUpdateTo, placeListIds } = req.body;
+  const { placeListIds } = req.body;
 
-  if (!(await groupModel.groupExists(userId, name)))
-    return groupNotFoundResponse(res);
-
-  const placeList = await groupModel.updateGroup(userId, name, {
-    nameUpdateTo,
-    placeListIds,
+  const requestSchema = Joi.object().keys({
+    nameUpdateTo: Joi.string(),
+    placeListIds: Joi.array().items(Joi.string()),
   });
 
+  if (!(await groupModel.getGroupByGroupName(userId, name)))
+    // 그룹 찾기 실패
+    return res.notFound("Group");
+
+  const { error } = requestSchema.validate(req.body);
+  if (error) return res.badRequest(error.message); // 리퀘스트 검증 실패
+
+  for (let i = 0; placeListIds.length > 0 && i < placeListIds.length; i++) {
+    if (!ObjectId.isValid(placeListIds[i]))
+      // 그룹에 추가할 PlaceListId의 ObjectId 검증 실패
+      return res.badRequest("Unexpected ObjectId");
+    if (!placeListModel.getPlaceListById(placeListIds[i]))
+      // 그룹에 추가할 PlaceList를 찾지 못함
+      return res.badRequest(
+        "Result searching by place list's id is not exists"
+      );
+  }
+
+  const placeList = await groupModel.updateGroup(userId, name, req.body);
   res.json(placeList);
-  "update group".console("success");
 });
 
 /**
  * [DELETE] /api/place-lists/groups/:name - 그룹 삭제
  */
-export const deleteGroup = promiseWrapper(async (req, res) => {
+export const deleteGroup = asyncWrapper(async (req, res) => {
   const { userId } = req.user;
   const { name } = req.params;
 
-  if (!(await groupModel.groupExists(userId, name)))
-    return groupNotFoundResponse(res);
+  const group = await groupModel.getGroupByGroupName(userId, name);
+  if (!group)
+    // 그룹 찾기 실패
+    return res.notFound("Group");
+  if (userIsCreator(userId, group.userId)) return res.forbidden();
 
   await groupModel.deleteGroup(userId, name);
 
   res.status(204);
-  "delete group".console("success");
 });

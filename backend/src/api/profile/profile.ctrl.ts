@@ -1,49 +1,78 @@
-import { promiseWrapper, errorResponse } from "lib/error";
+import Joi = require("@hapi/joi");
 import accountModel from "model/account";
-import * as errorType from "errorType";
+import { asyncWrapper } from "lib/error";
 
 /**
  * [GET] /api/profiles/:userId - userId로 프로필 조회
  */
-export const readProfile = promiseWrapper(async (req, res) => {
+export const readProfile = asyncWrapper(async (req, res) => {
   const { userId } = req.params;
 
-  let account = await accountModel.findByUserId(userId);
+  const account = await accountModel.getAccountByUserId(userId);
+  if (!account) return res.notFound("User");
 
-  if (!account)
-    return res.status(404).json(errorResponse(errorType.notFound("User")));
-
-  res.json({
-    userId: account.userId,
-    userName: account.userName,
-    createdAt: account.createdAt,
-  });
-
-  "get profile".console("success");
+  res.json(account.serialize());
 });
 
 /**
  * [PATCH] /api/profiles/:userId - userId로 프로필 업데이트
  */
-export const updateProfile = promiseWrapper(async (req, res) => {
+export const updateProfile = asyncWrapper(async (req, res) => {
   const { userId } = req.params;
+  const { userName } = req.body;
 
-  let account = await accountModel.findByUserId(userId);
-
-  if (!account)
-    return res.status(404).json(errorResponse(errorType.notFound("User")));
-
-  // 토큰 자격증명 비교를 통한 권한 체크
-  if (userId !== req.user.userId)
-    return res.status(403).json(errorResponse(errorType.AUTHORIZATION_DENIED));
-
-  account = await accountModel.findByUserIdAndUpdate(userId, req.body);
-
-  res.json({
-    userId: account.userId,
-    userName: account.userName,
-    createdAt: account.createdAt,
+  const requestSchema = Joi.object().keys({
+    userId: Joi.string(),
+    password: Joi.string(),
+    userName: Joi.string(),
   });
 
-  "update profile".console("success");
+  let account = await accountModel.getAccountByUserId(userId);
+  if (!account) return res.notFound("User"); // User 찾기 실패
+
+  const userMatched = account.userId === req.user.userId;
+  if (!userMatched) return res.forbidden(); // 수정 권한 없음
+
+  const { error } = requestSchema.validate(req.body);
+  if (error) return res.badRequest(error.message); // 리퀘스트 검증 실패
+
+  if (
+    req.body.userId &&
+    (await accountModel.getAccountByUserId(req.body.userId)) // 변경하려는 Id의 유저가 이미 존재한다면
+  )
+    return res.conflict("User");
+
+  const toUpdate = userName
+    ? { ...req.body, profile: { ...account.profile, userName } }
+    : req.body;
+
+  account = await accountModel.updateAccountByUserId(userId, toUpdate);
+  res.json(account.serialize());
+});
+
+/**
+ * [POST] /api/profiles/:userId/image - userId로 프로필 업데이트
+ */
+export const updateProfileImage = asyncWrapper(async (req, res) => {
+  const { userId } = req.params;
+  const { file } = req;
+
+  let account = await accountModel.getAccountByUserId(userId);
+  if (!account) return res.notFound("User"); // User 찾기 실패
+
+  const userMatched = account.userId === req.user.userId;
+  if (!userMatched) return res.forbidden(); // 수정 권한 없음
+
+  const profile = {
+    userName: account.profile.userName,
+    image: `/public/profile/img/${file.filename}`,
+  };
+
+  account = await accountModel.updateAccountByUserId(userId, {
+    profile,
+  });
+
+  res.json({
+    imgName: account.profile.image,
+  });
 });

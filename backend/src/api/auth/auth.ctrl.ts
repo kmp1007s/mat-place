@@ -1,56 +1,64 @@
 import { Response } from "express";
-import { promiseWrapper, errorResponse } from "lib/error";
-import { signOption } from "lib/cookie";
+import Joi = require("@hapi/joi");
 import accountModel from "model/account";
-import * as errorType from "errorType";
+import { asyncWrapper } from "lib/error";
+import { respondSignedCookie } from "lib/cookie";
 
-const RespondLoginInfo = (token: string, res: Response, userId: string) => {
-  res.cookie("token", token, signOption());
+const RespondLoginSuccess = (token: string, res: Response, userId: string) => {
+  respondSignedCookie(res, "token", token);
   res.json({ token, userId });
 };
 
 /**
  * [POST] /api/auth/register - 회원가입
  */
-export const localRegister = promiseWrapper(async (req, res) => {
-  let account = await accountModel.findByUserId(req.body.userId);
+export const localRegister = asyncWrapper(async (req, res) => {
+  const { userId } = req.body;
 
-  // Conflict
-  if (account)
-    return res.status(409).json(errorResponse(errorType.confilct("User")));
+  const requestSchema = Joi.object().keys({
+    userId: Joi.string().required(),
+    password: Joi.string().required(),
+    userName: Joi.string().required(),
+  });
 
-  const { userId, pwd, userName } = req.body;
-  account = await accountModel.localRegister({ userId, pwd, userName });
+  const { error } = requestSchema.validate(req.body);
+  if (error) return res.badRequest(error.message); // 리퀘스트 검증 실패
 
+  let account = await accountModel.getAccountByUserId(userId);
+
+  if (account) return res.conflict("User"); // 유저 충돌
+
+  account = await accountModel.localRegister(req.body);
   const token = await account.generateToken();
 
   res.status(201);
-  RespondLoginInfo(token, res, account.userId);
-
-  "register".console("success");
+  RespondLoginSuccess(token, res, userId);
 });
 
 /**
  * [POST] /api/auth/login/local - 로컬 계정 로그인
  */
-export const localLogin = promiseWrapper(async (req, res) => {
-  let account = await accountModel.findByUserId(req.body.userId);
+export const localLogin = asyncWrapper(async (req, res) => {
+  const { userId, password } = req.body;
 
-  if (!account)
-    return res.status(403).json(errorResponse(errorType.AUTHORIZATION_DENIED));
+  const requestSchema = Joi.object().keys({
+    userId: Joi.string().required(),
+    password: Joi.string().required(),
+  });
 
-  const token = await account.generateToken();
+  const { error } = requestSchema.validate(req.body);
+  if (error) return res.badRequest(error.message); // 리퀘스트 검증 실패
 
-  res.status(200);
-  RespondLoginInfo(token, res, account.userId);
+  const account = await accountModel.getAccountByUserId(userId);
+  if (!account || !account.validatePassword(password)) return res.forbidden(); // 로그인 인증 실패
 
-  "login".console("success");
+  const token = account.generateToken();
+  RespondLoginSuccess(token, res, userId);
 });
 
 /**
  * [POST] /api/auth/logout - 로그아웃
  */
-export const logout = promiseWrapper(async (req, res) => {
+export const logout = asyncWrapper(async (req, res) => {
   res.status(200).clearCookie("token").redirect("/");
-  "logout".console("success");
 });

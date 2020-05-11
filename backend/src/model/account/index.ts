@@ -2,15 +2,26 @@ import { Model, model } from "mongoose";
 import AccountSchema from "./schema";
 import AccountDocument from "./document";
 
-// model type 정의
+// TS를 위한 model 타입 정의
 interface AccountModel extends Model<AccountDocument> {
   // model methods (static methods)
-  findByUserId(userId: string): Promise<AccountDocument>;
-  findByUserIdAndUpdate(
+  localRegister(accountData: {
+    userId: string;
+    pwd: string;
+    userName: string;
+  }): Promise<AccountDocument>;
+  getAccountByUserId(userId: string): Promise<AccountDocument>;
+  updateAccountByUserId(
     userId: string,
-    update: object
+    toUpdate: {
+      userId?: string;
+      password?: string;
+      profile?: {
+        userName?: string;
+        image?: string;
+      };
+    }
   ): Promise<AccountDocument>;
-  localRegister(accountData: any): Promise<AccountDocument>;
 }
 
 const Account: AccountModel = model<AccountDocument, AccountModel>(

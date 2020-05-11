@@ -1,32 +1,17 @@
-const EXPIRES = 60 * 60 * 1000 * 24; // 24시간
+import { Response } from "express";
 
-interface SignOption {
-  expires: Date;
-  httpOnly: boolean;
-  signed: boolean;
-}
+export const effectiveTimes = () => 1000 * 60 * 60 * 24; // 유효 시간 24시간
 
-export function signOption(): SignOption {
-  const option: SignOption = {
-    expires: expiryDate(),
-    httpOnly: true,
-    signed: true
-  };
+const signOption = (expirationDate?: Date) => ({
+  expires: expirationDate || new Date(Date.now() + effectiveTimes()),
+  httpOnly: true,
+  signed: true,
+});
 
-  return option;
-}
-
-export function expiryDate(): Date {
-  return new Date(Date.now() + EXPIRES);
-}
-
-// function makeSignedCookie(key, value) {
-//   const option = {
-//     expires: expiryDate(),
-//     httpOnly: true,
-//     signed: true
-//   };
-
-//   const data = [key, value, option];
-//   return data;
-// }
+export const respondSignedCookie = (
+  res: Response,
+  cookieName: string,
+  cookieValue: string
+) => {
+  res.cookie(cookieName, cookieValue, signOption());
+};
