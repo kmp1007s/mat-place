@@ -1,10 +1,15 @@
 import React, { useEffect } from "react";
-import logo from "./logo.svg";
 import "./App.css";
+import Routing from "./route";
 import KakaoMapDemo from "./KakaoMapDemo";
 
 function App() {
-  return <div className="App">{/* <KakaoMapDemo /> */}</div>;
+  return (
+    <div id="App">
+      {/* <KakaoMapDemo /> */}
+      <Routing />
+    </div>
+  );
 }
 
 export default App;
