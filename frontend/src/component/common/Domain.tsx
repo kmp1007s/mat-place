@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
-import * as theme from "colorTheme";
+import * as theme from "schema/colors";
 
 const DomainContainer = styled.div`
   position: relative;

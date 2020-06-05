@@ -1,22 +1,24 @@
 import React from "react";
 import styled from "@emotion/styled";
-import * as theme from "colorTheme";
+import * as theme from "schema/colors";
 
 const RootContainer = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
   flex-direction: column;
 `;
 
 const BannerText = styled.h1`
   text-align: center;
   font-size: 2.6rem;
+  font-weight: 900;
 `;
 
 const InputContainer = styled.div`
   background-color: lightgray;
-  width: 50%;
-  height: 80%;
+  width: auto;
+  height: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -29,6 +31,7 @@ const LoginContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  height: 100%;
 `;
 
 const TransformTrigger = styled.button``;
@@ -38,7 +41,7 @@ const RegisterContainer = styled.div``;
 function LoginPage() {
   return (
     <RootContainer>
-      <BannerText>로그인</BannerText>
+      <BannerText>Welcome</BannerText>
       <InputContainer>
         <LoginContainer>
           <div>

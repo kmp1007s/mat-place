@@ -1,6 +1,8 @@
-html,
-body,
-#root {
+* {
+  box-sizing: border-box;
+}
+
+html {
   height: 100%;
 }
 
@@ -12,12 +14,19 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--white-light);
+  height: 100%;
 }
 
-* {
-  box-sizing: border-box;
+#root {
+  height: 100%;
 }
 
-:root {
-  --white-light: #f9f9f9;
+::-moz-selection {
+  background: var(--gray);
+  color: var(--black_light);
+}
+
+::selection {
+  background: var(--gray);
+  color: var(--black_light);
 }
