@@ -1,8 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import * as S from "./style";
 
 function LoginPage() {
   const [isLoginMode, setLoginMode] = useState(true);
+
+  const [inputId, setInputId] = useState("");
+  const [inputPwd, setInputPwd] = useState("");
+  const [inputName, setInputName] = useState("");
+
+  const resetInputs = useCallback(() => {
+    setInputId("");
+    setInputPwd("");
+    setInputName("");
+  }, []);
+
+  const toggleInputMode = useCallback(() => {
+    setLoginMode(!isLoginMode);
+  }, [isLoginMode]);
+
+  const transitionBtnClicked = useCallback(
+    (e) => {
+      toggleInputMode();
+      resetInputs();
+    },
+    [toggleInputMode]
+  );
 
   return (
     <S.RootContainer>
@@ -12,46 +34,48 @@ function LoginPage() {
         <S.Bold>아이디</S.Bold>와<S.Bold>비밀번호</S.Bold>를 입력해주세요!
       </S.SubTitleText>
       <S.InputBox>
-        {isLoginMode && (
-          <>
-            <S.ModeText>Log In</S.ModeText>
-            <S.FieldText>ID</S.FieldText>
-            <S.StyledInput type="text" placeholder="YOUR ID" full={true} />
-            <S.FieldText>PASSWORD</S.FieldText>
-            <S.StyledInput
-              type="password"
-              placeholder="YOUR PASSWORD"
-              full={true}
-            />
-            <S.StyledButton full={true}>LOGIN</S.StyledButton>
-            <S.TransitionButton
-              onClick={(e) => {
-                setLoginMode(false);
-              }}
-            />
-          </>
-        )}
+        <S.ModeText>{isLoginMode ? "Log In" : "Sign Up"}</S.ModeText>
         {!isLoginMode && (
           <>
-            <S.ModeText>Sign Up</S.ModeText>
             <S.FieldText>USER NAME</S.FieldText>
-            <S.StyledInput type="text" placeholder="YOUR NAME" full={true} />
-            <S.FieldText>ID</S.FieldText>
-            <S.StyledInput type="text" placeholder="YOUR ID" full={true} />
-            <S.FieldText>PASSWORD</S.FieldText>
             <S.StyledInput
-              type="password"
-              placeholder="YOUR PASSWORD"
+              type="text"
+              placeholder="YOUR NAME"
               full={true}
-            />
-            <S.StyledButton full={true}>SIGN UP</S.StyledButton>
-            <S.TransitionButton
-              onClick={(e) => {
-                setLoginMode(true);
+              value={inputName}
+              onChange={(e) => {
+                setInputName(e.target.value);
+                console.log(inputName);
               }}
             />
           </>
         )}
+        <S.FieldText>ID</S.FieldText>
+        <S.StyledInput
+          type="text"
+          placeholder="YOUR ID"
+          full={true}
+          value={inputId}
+          onChange={(e) => {
+            setInputId(e.target.value);
+            console.log(inputId);
+          }}
+        />
+        <S.FieldText>PASSWORD</S.FieldText>
+        <S.StyledInput
+          type="password"
+          placeholder="YOUR PASSWORD"
+          full={true}
+          value={inputPwd}
+          onChange={(e) => {
+            setInputPwd(e.target.value);
+            console.log(inputPwd);
+          }}
+        />
+        <S.StyledButton full={true}>
+          {isLoginMode ? "LOGIN" : "SIGN UP"}
+        </S.StyledButton>
+        <S.TransitionButton onClick={transitionBtnClicked} />
       </S.InputBox>
     </S.RootContainer>
   );

@@ -99,7 +99,6 @@ export const FieldText = styled.div`
   align-self: start;
   color: ${color.GRAY};
   user-select: none;
-  animation: ${slideFromTopWithFade} 1s ease;
 `;
 
 export const StyledInput = styled(Input)`
