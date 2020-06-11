@@ -1,9 +1,9 @@
 import React from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-import NotFoundPage from "page/NotFoundPage";
-import LoginPage from "page/LoginPage";
+import NotFoundPage from "page/NotFound";
+import LoginPage from "page/Login";
 
-function Routing() {
+function Routes() {
   return (
     <BrowserRouter>
       <Switch>
@@ -14,4 +14,4 @@ function Routing() {
   );
 }
 
-export default Routing;
+export default Routes;

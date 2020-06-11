@@ -1,7 +1,7 @@
 import * as React from "react";
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
-import * as theme from "schema/colors";
+import * as color from "schema/colors";
 
 interface PropType {
   children: React.ReactNode;
@@ -15,12 +15,11 @@ export default (props: PropType) => {
   const StyledLink = styled(Link)`
     text-decoration: none;
     position: relative;
-    color: ${props.color || theme.PRIMARY};
-    z-index: 2;
+    color: ${props.color || color.PRIMARY};
     font-size: ${props.size || 1}rem;
 
     &:hover {
-      color: ${props.color || theme.PRIMARY_DARK};
+      color: ${props.color || color.PRIMARY_DARK};
     }
 
     &::after {
@@ -29,12 +28,11 @@ export default (props: PropType) => {
       position: absolute;
       width: 0%;
       height: 12%;
-      background-color: ${props.color || theme.PRIMARY};
+      background-color: ${props.color || color.PRIMARY};
       bottom: 1px;
-      // left: 50%;
-      left: -5%;
+      left: 50%;
+      // left: -5%;
       transform: translateX(-50%);
-      z-index: 1;
       transition: all 0.5s;
     }
 
