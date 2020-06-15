@@ -3,8 +3,8 @@ import { keyframes } from "@emotion/core";
 
 import * as color from "schema/colors";
 
-import Input from "component/common/Input";
-import Button from "component/common/Button";
+import Input from "component/Common/Input";
+import Button from "component/Common/Button";
 
 import { AiOutlineDoubleRight } from "react-icons/ai";
 

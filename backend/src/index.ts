@@ -4,6 +4,7 @@ import mongoose = require("mongoose");
 import * as express from "express";
 import * as bodyParser from "body-parser";
 import * as cookieParser from "cookie-parser";
+import cors = require("cors");
 
 import api from "./api";
 import { logRoutesInfo } from "./lib/log";
@@ -27,6 +28,7 @@ mongoose
   .catch((e) => console.error(e));
 
 app
+  .use(cors())
   .use(express.static("public"))
   .use(bodyParser.urlencoded({ extended: false }))
   .use(bodyParser.json())
