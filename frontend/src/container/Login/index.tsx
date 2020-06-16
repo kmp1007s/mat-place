@@ -1,8 +1,15 @@
 import React, { useState, useCallback } from "react";
 import * as C from "component/Login";
-import { login, register } from "api/auth";
+import * as api from "api/auth";
+
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "modules";
+import { login } from "modules/login";
 
 function LoginContainer() {
+  const userId = useSelector((state: RootState) => state.login.userId);
+  const dispatch = useDispatch();
+
   const [isLoginMode, setLoginMode] = useState(true);
 
   const [inputId, setInputId] = useState("");
@@ -33,8 +40,14 @@ function LoginContainer() {
       const password = inputPwd;
       const userName = inputName;
 
-      if (isLoginMode) await login({ userId, password });
-      else await register({ userId, password, userName });
+      if (isLoginMode) {
+        const data = await api.login({ userId, password });
+        console.log(data);
+        dispatch(login(data.userId));
+      } else {
+        const data = await api.register({ userId, password, userName });
+        console.log(data);
+      }
 
       resetInputs();
     },

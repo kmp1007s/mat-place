@@ -1,7 +1,7 @@
 import axios from "./axios";
 
 type LoginParam = { userId: string; password: string };
-type ReigsterParam = { userId: string; password: string; userName: string };
+type ReigsterParam = LoginParam & { userName: string };
 
 export const login = async (loginParam: LoginParam) => {
   const response = await axios.post("auth/login/local", loginParam);
