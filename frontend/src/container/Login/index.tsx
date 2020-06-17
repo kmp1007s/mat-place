@@ -4,7 +4,7 @@ import * as api from "api/auth";
 
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "modules";
-import { login } from "modules/login";
+import { startLogin } from "modules/login";
 
 function LoginContainer() {
   const userId = useSelector((state: RootState) => state.login.userId);
@@ -41,11 +41,9 @@ function LoginContainer() {
       const userName = inputName;
 
       if (isLoginMode) {
-        const data = await api.login({ userId, password });
-        console.log(data);
-        dispatch(login(data.userId));
+        dispatch(startLogin({ userId, password }));
       } else {
-        const data = await api.register({ userId, password, userName });
+        const { data } = await api.register({ userId, password, userName });
         console.log(data);
       }
 
