@@ -3,25 +3,19 @@ import { call, put, takeEvery } from "redux-saga/effects";
 import { AxiosResponse } from "axios";
 import * as api from "api/auth";
 
+import { createAction, ActionType, createReducer } from "typesafe-actions";
+
 // Action Type
-const START_LOGIN = "login/START_LOGIN" as const;
-const LOGIN_SUCCESS = "login/LOGIN_SUCCESS" as const;
+const START_LOGIN = "login/START_LOGIN";
+const LOGIN_SUCCESS = "login/LOGIN_SUCCESS";
 
 // Action Creator
-export const startLogin = (loginParam: api.LoginParam) => ({
-  type: START_LOGIN,
-  payload: loginParam,
-});
-
-export const loginSuccess = (userId: string) => ({
-  type: LOGIN_SUCCESS,
-  payload: userId,
-});
+export const startLogin = createAction(START_LOGIN)<api.LoginParam>();
+export const loginSuccess = createAction(LOGIN_SUCCESS)<string>();
 
 // Reducer Action Type
-type LoginAction =
-  | ReturnType<typeof startLogin>
-  | ReturnType<typeof loginSuccess>;
+const actions = { startLogin, loginSuccess };
+type LoginAction = ActionType<typeof actions>;
 
 // Reducer State Type
 type LoginState = {
@@ -48,13 +42,8 @@ export function* loginsSaga() {
   yield takeEvery(START_LOGIN, loginSaga);
 }
 
-function reducer(state: LoginState = initialState, action: LoginAction) {
-  switch (action.type) {
-    case LOGIN_SUCCESS:
-      return { ...state, userId: action.payload };
-    default:
-      return state;
-  }
-}
+const reducer = createReducer<LoginState, LoginAction>(initialState, {
+  [LOGIN_SUCCESS]: (state, action) => ({ ...state, userId: action.payload }),
+});
 
 export default reducer;
