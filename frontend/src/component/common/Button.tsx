@@ -6,9 +6,9 @@ type ButtonProps = {
 };
 
 const Button = styled.button<ButtonProps>`
-  border: 1px solid ${color.SECONDARY};
+  border: 1px solid ${color.PRIMARY};
   background-color: transparent;
-  color: ${color.SECONDARY};
+  color: ${color.PRIMARY};
   padding: 8px;
   border-radius: 3px;
   font-size: 1rem;
@@ -18,7 +18,7 @@ const Button = styled.button<ButtonProps>`
   user-select: none;
 
   &:hover {
-    background-color: ${color.SECONDARY};
+    background-color: ${color.PRIMARY_LIGHT};
     border: 1px solid transparent;
     color: ${color.WHITE_LIGHT};
     transition: all 0.4s;

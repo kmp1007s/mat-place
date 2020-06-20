@@ -17,11 +17,7 @@ body {
   height: 100%;
 }
 
-#root {
-  height: 100%;
-}
-
-::-moz-selection {
+/* ::-moz-selection {
   background: var(--gray);
   color: var(--black_light);
 }
@@ -29,12 +25,16 @@ body {
 ::selection {
   background: var(--gray);
   color: var(--black_light);
-}
+} */
 
 html,
-body,
-#root,
-#root > div {
+body {
   width: 100%;
   height: 100%;
+}
+
+#root,
+#root > div {
+  width: inherit;
+  height: inherit;
 }

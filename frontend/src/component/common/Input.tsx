@@ -15,19 +15,21 @@ const Input = styled.input<InputProps>`
   padding: 0.3rem;
   font-size: 1rem;
   transition: all 1s;
+  color: ${color.GRAY_DARK};
 
   &::placeholder {
-    transition: padding 0.2 s;
+    padding-left: 0;
+    transition: padding 0.2s;
   }
 
   &:focus {
     outline: none;
-    border-bottom: 1px solid ${color.SECONDARY};
-    color: ${color.SECONDARY};
+    border-bottom: 1px solid ${color.PRIMARY_LIGHT};
+    color: ${color.PRIMARY_LIGHT};
     transition: all 0.4s;
 
     &::placeholder {
-      color: ${color.SECONDARY};
+      color: ${color.PRIMARY_LIGHT};
       padding-left: 4px;
       transition: padding 0.2s;
     }

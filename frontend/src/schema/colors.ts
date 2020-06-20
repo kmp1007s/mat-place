@@ -1,13 +1,17 @@
-export const WHITE_LIGHT = "#f9f9f9";
-export const BLACK_LIGHT = "#141414";
+export const WHITE = "#ffffff";
+export const WHITE_LIGHT = "#EEEAF7";
 
-export const GRAY = "#9b9b9b";
-export const GRAY_LIGHT = "#f2f2f2";
+export const BLACK = "#000000";
+export const BLACK_LIGHT = "#29292b";
 
-export const PRIMARY = "#530aff";
-export const PRIMARY_LIGHT = "#7e49fc";
-export const PRIMARY_DARK = "#21007c";
+export const GRAY = "#939199";
+export const GRAY_LIGHT = "#BDBAC4";
+export const GRAY_DARK = "#646368";
+
+export const PRIMARY = "#6a31f9";
+export const PRIMARY_LIGHT = "#8d64f4";
+export const PRIMARY_DARK = "#4618BA";
 
 export const SECONDARY = "#2f5bf9";
-export const SECONDARY_LIGHT = "#5077f4";
+export const SECONDARY_LIGHT = "#936bf9";
 export const SECONDARY_DARK = "#254ac4";

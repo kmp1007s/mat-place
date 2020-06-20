@@ -8,7 +8,7 @@ const AccountSchema: Schema = new Schema({
   hashedPassword: String,
   profile: {
     userName: String,
-    image: { type: String, default: "/public/profile/img/default_profile.png" },
+    image: { type: String, default: "profile/img/default_profile.png" },
   },
   createdAt: { type: Date, default: Date.now },
 
