@@ -1,6 +1,5 @@
 import styled from "lib/styled";
 import { Link } from "react-router-dom";
-import * as color from "schema/colors";
 
 type LinkProps = {
   color?: string;
