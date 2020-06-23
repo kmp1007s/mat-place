@@ -1,4 +1,7 @@
 import React, { useState, useCallback, useEffect } from "react";
+
+import Loading from "component/Common/Loading";
+
 import * as C from "component/Login";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -56,9 +59,9 @@ function LoginContainer({ history }: RouteComponentProps) {
   return (
     <>
       {loading === "STARTED" && (
-        <C.Loading>
+        <Loading>
           <span>요청을 처리 중입니다...</span>
-        </C.Loading>
+        </Loading>
       )}
       <C.InputBox>
         <C.ModeText>{isLoginMode ? "로그인" : "회원가입"}</C.ModeText>
