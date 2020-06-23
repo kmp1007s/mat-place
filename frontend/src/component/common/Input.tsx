@@ -1,5 +1,4 @@
-import styled from "@emotion/styled";
-import * as color from "schema/colors";
+import styled from "lib/styled";
 
 type InputProps = {
   full?: boolean;
@@ -7,7 +6,7 @@ type InputProps = {
 
 const Input = styled.input<InputProps>`
   border: 0;
-  border-bottom: 1px solid ${color.GRAY};
+  border-bottom: 1px solid ${(props) => props.theme.color.GRAY};
   background-color: transparent;
   position: relative;
   width: ${(props) => (props.full ? "90%" : "auto")};
@@ -15,7 +14,7 @@ const Input = styled.input<InputProps>`
   padding: 0.3rem;
   font-size: 1rem;
   transition: all 1s;
-  color: ${color.GRAY_DARK};
+  color: ${(props) => props.theme.color.GRAY_DARK};
 
   &::placeholder {
     padding-left: 0;
@@ -24,12 +23,12 @@ const Input = styled.input<InputProps>`
 
   &:focus {
     outline: none;
-    border-bottom: 1px solid ${color.PRIMARY_LIGHT};
-    color: ${color.PRIMARY_LIGHT};
+    border-bottom: 1px solid ${(props) => props.theme.color.PRIMARY_LIGHT};
+    color: ${(props) => props.theme.color.PRIMARY_LIGHT};
     transition: all 0.4s;
 
     &::placeholder {
-      color: ${color.PRIMARY_LIGHT};
+      color: ${(props) => props.theme.color.PRIMARY_LIGHT};
       padding-left: 4px;
       transition: padding 0.2s;
     }

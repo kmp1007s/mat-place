@@ -15,20 +15,31 @@ import createSagaMiddleware from "redux-saga";
 import { composeWithDevTools } from "redux-devtools-extension";
 import logger from "redux-logger";
 
+import { ThemeProvider } from "emotion-theming";
+import * as colors from "schema/colors";
+
 const sagaMiddleware = createSagaMiddleware(); // 사가 미들웨어 생성
 const store = createStore(
   rootReducer,
   composeWithDevTools(applyMiddleware(sagaMiddleware, logger))
 ); // 미들웨어 적용
 
+const theme = {
+  color: {
+    ...colors,
+  },
+};
+
 sagaMiddleware.run(rootSaga); // 루트 사가 실행
 
 ReactDOM.render(
   <React.StrictMode>
     <SetColorCSS />
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <ThemeProvider theme={theme}>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </ThemeProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

@@ -1,14 +1,13 @@
-import styled from "@emotion/styled";
-import * as color from "schema/colors";
+import styled from "lib/styled";
 
 type ButtonProps = {
   full?: boolean;
 };
 
 const Button = styled.button<ButtonProps>`
-  border: 1px solid ${color.PRIMARY};
+  border: 1px solid ${(props) => props.theme.color.PRIMARY};
   background-color: transparent;
-  color: ${color.PRIMARY};
+  color: ${(props) => props.theme.color.PRIMARY};
   padding: 8px;
   border-radius: 3px;
   font-size: 1rem;
@@ -18,9 +17,9 @@ const Button = styled.button<ButtonProps>`
   user-select: none;
 
   &:hover {
-    background-color: ${color.PRIMARY_LIGHT};
+    background-color: ${(props) => props.theme.color.PRIMARY_LIGHT};
     border: 1px solid transparent;
-    color: ${color.WHITE_LIGHT};
+    color: ${(props) => props.theme.color.WHITE_LIGHT};
     transition: all 0.4s;
   }
 

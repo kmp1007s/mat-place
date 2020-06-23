@@ -1,4 +1,4 @@
-import styled from "@emotion/styled";
+import styled from "lib/styled";
 import { Link } from "react-router-dom";
 import * as color from "schema/colors";
 
@@ -10,11 +10,11 @@ type LinkProps = {
 export default styled(Link)<LinkProps>`
   text-decoration: none;
   position: relative;
-  color: ${(props) => props.color || color.PRIMARY};
+  color: ${(props) => props.color || props.theme.color.PRIMARY};
   font-size: ${(props) => props.size || 1}rem;
 
   &:hover {
-    color: ${(props) => props.color || color.PRIMARY_DARK};
+    color: ${(props) => props.color || props.theme.color.PRIMARY_DARK};
   }
 
   &::after {
@@ -23,7 +23,7 @@ export default styled(Link)<LinkProps>`
     position: absolute;
     width: 0%;
     height: 12%;
-    background-color: ${(props) => props.color || color.PRIMARY};
+    background-color: ${(props) => props.color || props.theme.color.PRIMARY};
     bottom: 1px;
     left: 50%;
     // left: -5%;
