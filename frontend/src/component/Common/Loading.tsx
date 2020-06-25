@@ -18,6 +18,15 @@ const fadeIn = keyframes`
   }
 `;
 
+const backgroundChange = keyframes`
+  0% {
+    background-color: black;
+  }
+  100% {
+    background-color: var(--primary_dark);
+  }
+`;
+
 const LoadingContainer = styled.div<Props>`
   background-color: ${(props) => (props.background ? "black" : "transparent")};
   position: absolute;
@@ -31,7 +40,8 @@ const LoadingContainer = styled.div<Props>`
   justify-content: center;
   align-content: center;
   align-items: flex-start;
-  animation: ${fadeIn} ease 0.3s;
+  animation: ${fadeIn} ease 3s infinite alternate,
+    ${backgroundChange} ease 6s infinite alternate;
   opacity: 0;
 
   & > * {
