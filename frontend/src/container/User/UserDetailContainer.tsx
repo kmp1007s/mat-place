@@ -4,16 +4,21 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "modules";
 import { getUser } from "modules/user";
 
-import UserDetail from "component/User/UserDetail";
+import Profile from "component/User/UserDetail/Profile";
+import RootContainer from "component/User/UserDetail/RootContainer";
+
+import Loading from "component/Common/Loading";
+
+import PlaceListContainer from "container/PlaceList";
 
 type Props = {
   userId: string;
 };
 
-function UserContainer(props: Props) {
-  const { userId } = props;
+function UserDetailContainer({ userId }: Props) {
+  const { user, loading } = useSelector((state: RootState) => state.user);
+  const { login } = useSelector((state: RootState) => state);
 
-  const { user } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -21,12 +26,21 @@ function UserContainer(props: Props) {
   }, [dispatch, userId]);
 
   return (
-    <>
-      <span>{userId}</span>
-      <br />
-      <UserDetail user={user}></UserDetail>
-    </>
+    <RootContainer>
+      {loading === "STARTED" && <Loading background withText />}
+      {loading === "SUCCESS" && user && (
+        <>
+          <Profile user={user} isOwner={login.userId === user.userId}></Profile>
+          <PlaceListContainer userId={userId} />
+        </>
+      )}
+      {loading === "FAIL" && (
+        <>
+          <div>없는 유저입니다</div>
+        </>
+      )}
+    </RootContainer>
   );
 }
 
-export default UserContainer;
+export default UserDetailContainer;

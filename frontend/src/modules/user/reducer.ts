@@ -14,6 +14,10 @@ const reducer = createReducer<UserState, UserAction>(initialState, {
     user: action.payload,
     loading: "SUCCESS",
   }),
-  [GET_USER_FAIL]: (state, action) => ({ ...state, loading: "FAIL" }),
+  [GET_USER_FAIL]: (state, action) => ({
+    ...state,
+    user: null,
+    loading: "FAIL",
+  }),
 });
 export default reducer;
