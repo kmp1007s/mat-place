@@ -30,7 +30,7 @@ function UserDetailContainer({ userId }: Props) {
       {loading === "STARTED" && <Loading background withText />}
       {loading === "SUCCESS" && user && (
         <>
-          <Profile user={user} isOwner={login.userId === user.userId}></Profile>
+          <Profile user={user} isOwner={login.userId === user.userId} />
           <PlaceListContainer userId={userId} />
         </>
       )}
