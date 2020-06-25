@@ -1,34 +1,57 @@
 import * as React from "react";
 import styled from "@emotion/styled";
+import { keyframes } from "@emotion/core";
+import { GooeyLoader1 } from "react-loaders-kit";
+import * as color from "schema/colors";
 
-export const LoadingContainer = styled.div`
-  background-color: black;
+type Props = {
+  background?: boolean;
+  withText?: boolean;
+};
+
+const fadeIn = keyframes`
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0.95;
+  }
+`;
+
+const LoadingContainer = styled.div<Props>`
+  background-color: ${(props) => (props.background ? "black" : "transparent")};
   position: absolute;
   top: 0;
   left: 0;
   z-index: 998;
-  opacity: 0.7;
   width: 100%;
   height: 100%;
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
+  align-content: center;
+  align-items: flex-start;
+  animation: ${fadeIn} ease 0.3s;
+  opacity: 0;
 
-  & * {
+  & > * {
     z-index: 999;
-    opacity: 1;
     color: white;
-    font-size: 2.2rem;
+    font-size: 1.8rem;
     font-weight: 400;
+    flex: 100%;
+    width: auto;
+    text-align: center;
   }
 `;
 
-type Props = {
-  children: React.ReactNode;
-};
-
 function Loading(props: Props) {
-  return <LoadingContainer>{props.children}</LoadingContainer>;
+  return (
+    <LoadingContainer {...props}>
+      <GooeyLoader1 loading color={color.WHITE} size={100} />
+      {props.withText && <span>요청을 처리중입니다...</span>}
+    </LoadingContainer>
+  );
 }
 
 export default Loading;
