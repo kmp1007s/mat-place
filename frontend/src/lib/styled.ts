@@ -7,4 +7,8 @@ type Theme = {
   color: typeof color;
 };
 
+export type ThemeProps = {
+  theme: Theme;
+};
+
 export default styled as CreateStyled<Theme>;
