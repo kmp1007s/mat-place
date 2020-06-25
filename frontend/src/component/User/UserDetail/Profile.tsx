@@ -8,6 +8,7 @@ import UserId from "component/User/UserDetail/UserId";
 import BlockText from "component/User/UserDetail/BlockText";
 import FieldText from "component/User/UserDetail/FieldText";
 import Button from "component/Common/Button";
+import DetailProfileWrapper from "component/User/UserDetail/DetailProfileWrapper";
 
 import * as dateUtil from "lib/dateUtil";
 
@@ -26,14 +27,16 @@ function Profile(props: Props) {
         <UserId>{user.userId}</UserId>
         {isOwner && <Button invert>수정</Button>}
       </Flex>
-      <Flex padding={6}>
-        <FieldText>사용자 이름</FieldText>
-        <BlockText>{user.profile.userName}</BlockText>
-      </Flex>
-      <Flex padding={6}>
-        <FieldText>계정 생성일</FieldText>
-        <BlockText>{dateUtil.format(user.createdAt)}</BlockText>
-      </Flex>
+      <DetailProfileWrapper>
+        <p>
+          <FieldText>사용자 이름</FieldText>
+          <BlockText>{user.profile.userName}</BlockText>
+        </p>
+        <p>
+          <FieldText>계정 생성일</FieldText>
+          <BlockText>{dateUtil.format(user.createdAt)}</BlockText>
+        </p>
+      </DetailProfileWrapper>
     </ProfileBox>
   );
 }
