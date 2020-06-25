@@ -21,7 +21,7 @@ function Profile(props: Props) {
 
   return (
     <ProfileBox>
-      <Flex padding={48}>
+      <Flex padding={80}>
         <ProfileImage path={user?.profile.image} />
         <UserId>{user.userId}</UserId>
         {isOwner && <Button invert>수정</Button>}

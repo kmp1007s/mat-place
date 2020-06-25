@@ -6,8 +6,7 @@ const ProfileBox = styled.div`
   justify-content: center;
   align-items: flex-start;
   align-content: flex-start;
-  padding-top: 6%;
-  padding-bottom: 6%;
+  padding: 3% 0;
   width: 100%;
   background-color: ${(props) => props.theme.color.PRIMARY};
 
