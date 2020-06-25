@@ -10,3 +10,5 @@ export const login = (loginParam: LoginParam) =>
 
 export const register = (registerParam: ReigsterParam) =>
   request<LoginResponse, ReigsterParam>("POST", "auth/register", registerParam);
+
+export const tokenCheck = () => request<string, void>("POST", "auth/check");
