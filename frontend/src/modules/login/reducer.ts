@@ -7,6 +7,7 @@ import {
   REGISTER,
   REGISTER_SUCCESS,
   REGISTER_FAIL,
+  TOKEN_CHECK_SUCCESS,
 } from "./action";
 
 const initialState: LoginState = {
@@ -29,5 +30,9 @@ const reducer = createReducer<LoginState, LoginAction>(initialState, {
     loading: "SUCCESS",
   }),
   [REGISTER_FAIL]: (state, action) => ({ ...state, loading: "FAIL" }),
+  [TOKEN_CHECK_SUCCESS]: (state, action) => ({
+    ...state,
+    userId: action.payload,
+  }),
 });
 export default reducer;

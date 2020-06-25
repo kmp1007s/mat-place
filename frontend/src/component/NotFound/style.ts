@@ -1,6 +1,4 @@
-import styled from "@emotion/styled";
-
-import * as color from "schema/colors";
+import styled from "lib/styled";
 
 export const RootContainer = styled.div`
   display: flex;
@@ -25,5 +23,5 @@ export const StyledImage = styled.img`
 
 export const NotFoundMessage = styled.h1`
   margin: 32px;
-  color: ${color.BLACK_LIGHT};
+  color: ${(props) => props.theme.color.BLACK_LIGHT};
 `;

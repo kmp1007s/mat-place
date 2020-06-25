@@ -1,7 +1,5 @@
-import styled from "@emotion/styled";
+import styled from "lib/styled";
 import { keyframes } from "@emotion/core";
-
-import * as color from "schema/colors";
 
 import Input from "component/Common/Input";
 import Button from "component/Common/Button";
@@ -40,7 +38,7 @@ export const RootContainer = styled.div`
   align-items: center;
   align-content: center;
   justify-content: center;
-  background-color: ${color.PRIMARY_LIGHT};
+  background-color: ${(props) => props.theme.color.PRIMARY_LIGHT};
 
   & > * {
     flex-basis: 100%;
@@ -51,7 +49,7 @@ export const TitleText = styled.h1`
   text-align: center;
   font-size: 2.6rem;
   font-weight: 900;
-  color: ${color.WHITE_LIGHT};
+  color: ${(props) => props.theme.color.WHITE_LIGHT};
   user-select: none;
 `;
 
@@ -60,7 +58,7 @@ export const SubTitleText = styled.span`
   display: block;
   font-size: 1.8rem;
   font-weight: 300;
-  color: ${color.WHITE_LIGHT};
+  color: ${(props) => props.theme.color.WHITE_LIGHT};
   user-select: none;
   margin-bottom: 32px;
 `;
@@ -72,7 +70,7 @@ export const Bold = styled.span`
 `;
 
 export const InputBox = styled.div`
-  background-color: ${color.WHITE_LIGHT};
+  background-color: ${(props) => props.theme.color.WHITE_LIGHT};
   display: inline-flex;
   flex-direction: column;
   align-items: center;
@@ -80,7 +78,7 @@ export const InputBox = styled.div`
   flex-wrap: wrap;
   padding: 32px;
   border-radius: 8px;
-  border: 1px solid ${color.GRAY_LIGHT};
+  border: 1px solid ${(props) => props.theme.color.GRAY_LIGHT};
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
   flex-basis: 600px;
   position: relative;
@@ -90,7 +88,7 @@ export const ModeText = styled.div`
   text-align: center;
   font-size: 1.5rem;
   margin-bottom: 16px;
-  color: ${color.GRAY_DARK};
+  color: ${(props) => props.theme.color.GRAY_DARK};
   user-select: none;
   animation: ${slideFromRight} 1s ease;
 `;
@@ -98,7 +96,7 @@ export const ModeText = styled.div`
 export const FieldText = styled.div`
   padding-left: 36px;
   align-self: start;
-  color: ${color.GRAY_DARK};
+  color: ${(props) => props.theme.color.GRAY_DARK};
   user-select: none;
 `;
 
@@ -115,7 +113,7 @@ export const StyledButton = styled(Button)`
 `;
 
 export const TransitionButton = styled(AiOutlineDoubleRight)`
-  color: ${color.PRIMARY};
+  color: ${(props) => props.theme.color.PRIMARY};
   height: 32px;
   width: 32px;
   position: absolute;

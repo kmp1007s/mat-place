@@ -58,11 +58,7 @@ function LoginContainer({ history }: RouteComponentProps) {
 
   return (
     <>
-      {loading === "STARTED" && (
-        <Loading>
-          <span>요청을 처리 중입니다...</span>
-        </Loading>
-      )}
+      {loading === "STARTED" && <Loading background withText />}
       <C.InputBox>
         <C.ModeText>{isLoginMode ? "로그인" : "회원가입"}</C.ModeText>
         <C.FieldText>아이디</C.FieldText>
