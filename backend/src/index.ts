@@ -28,14 +28,14 @@ mongoose
   .catch((e) => console.error(e));
 
 app
-  .use(cors())
+  .use(cors({ origin: true, credentials: true }))
   .use(express.static("public"))
   .use(bodyParser.urlencoded({ extended: false }))
   .use(bodyParser.json())
-  .use(logRoutesInfo)
   .use(cookieParser(COOKIE_SECRET))
   .use(addErrorRespond)
   .use(validateToken)
+  .use(logRoutesInfo)
   .use("/api", api)
   .use(handleErrors);
 

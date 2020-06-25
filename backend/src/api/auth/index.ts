@@ -5,6 +5,7 @@ const auth = Router();
 
 auth.post("/register", authCtrl.localRegister);
 auth.post("/login/local", authCtrl.localLogin);
+auth.post("/check", authCtrl.tokenCheck);
 auth.post("/logout", authCtrl.logout);
 
 export default auth;

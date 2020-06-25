@@ -56,6 +56,19 @@ export const localLogin = asyncWrapper(async (req, res) => {
   RespondLoginSuccess(token, res, userId);
 });
 
+export const tokenCheck = asyncWrapper(async (req, res) => {
+  const { user } = req;
+
+  if (!user) return res.unauthorized();
+
+  const { userId } = user;
+
+  const account = await accountModel.getAccountByUserId(userId);
+  if (!account) return res.forbidden();
+
+  res.json(userId).status(200);
+});
+
 /**
  * [POST] /api/auth/logout - 로그아웃
  */
