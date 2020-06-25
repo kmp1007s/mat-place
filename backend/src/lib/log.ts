@@ -41,3 +41,11 @@ export function logRoutesInfo(req: Request, res: Response, next: NextFunction) {
   `${req.url}[${req.method}]`.log("info");
   next();
 }
+
+// export function logRoutingSucceed(
+//   req: Request,
+//   res: Response,
+//   next: NextFunction
+// ) {
+//   "Route Successfully Handled".log("success");
+// }
