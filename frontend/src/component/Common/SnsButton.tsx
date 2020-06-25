@@ -8,6 +8,7 @@ const SnsButton = styled.img`
   object-fit: cover;
   border: 0;
   transition: all 0.2s ease;
+  user-select: none;
 
   &:hover {
     transform: scale(1.1);

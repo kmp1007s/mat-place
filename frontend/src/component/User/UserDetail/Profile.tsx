@@ -24,13 +24,13 @@ function Profile(props: Props) {
       <Flex padding={48}>
         <ProfileImage path={user?.profile.image} />
         <UserId>{user.userId}</UserId>
-        {isOwner && <Button invert={true}>수정</Button>}
+        {isOwner && <Button invert>수정</Button>}
       </Flex>
-      <Flex padding={14}>
+      <Flex padding={6}>
         <FieldText>사용자 이름</FieldText>
         <BlockText>{user.profile.userName}</BlockText>
       </Flex>
-      <Flex padding={14}>
+      <Flex padding={6}>
         <FieldText>계정 생성일</FieldText>
         <BlockText>{dateUtil.format(user.createdAt)}</BlockText>
       </Flex>

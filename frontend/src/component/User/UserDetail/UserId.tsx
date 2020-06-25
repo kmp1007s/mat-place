@@ -7,7 +7,6 @@ const UserId = styled.div`
   margin-right: 1%;
   font-weight: 700;
   color: ${(props) => props.theme.color.WHITE_LIGHT};
-  border-bottom: 5px solid ${(props) => props.theme.color.WHITE_LIGHT};
 `;
 
 export default UserId;
