@@ -4,6 +4,7 @@ import {
   LOGIN,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
+  LOGIN_RESET,
   REGISTER,
   REGISTER_SUCCESS,
   REGISTER_FAIL,
@@ -23,6 +24,7 @@ const reducer = createReducer<LoginState, LoginAction>(initialState, {
     loading: "SUCCESS",
   }),
   [LOGIN_FAIL]: (state, action) => ({ ...state, loading: "FAIL" }),
+  [LOGIN_RESET]: (state, action) => ({ ...state, loading: "UNSTARTED" }),
   [REGISTER]: (state, action) => ({ ...state, loading: "STARTED" }),
   [REGISTER_SUCCESS]: (state, action) => ({
     ...state,

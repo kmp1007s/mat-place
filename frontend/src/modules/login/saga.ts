@@ -2,6 +2,7 @@ import {
   login,
   loginSuccess,
   loginFail,
+  loginReset,
   register,
   registerSuccess,
   reigsterFail,
@@ -23,6 +24,7 @@ function* loginSaga(action: ReturnType<typeof login>) {
       action.payload
     );
     yield put(loginSuccess(data.userId));
+    yield put(loginReset());
   } catch (e) {
     console.log(e);
     yield put(loginFail());
