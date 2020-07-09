@@ -6,13 +6,14 @@ type Props = {
 };
 
 const StyledImage = styled.img`
-  width: 200px;
-  height: 200px;
+  width: 160px;
+  height: 160px;
   border-radius: 50%;
   float: left;
   object-fit: cover;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
     0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  user-select: none;
 `;
 
 function Profile(props: Props) {

@@ -1,7 +1,7 @@
 import styled from "lib/styled";
 
 const SnsButton = styled.img`
-  float: right;
+  float: left;
   margin-right: 8px;
   width: 20px;
   height: 20px;
