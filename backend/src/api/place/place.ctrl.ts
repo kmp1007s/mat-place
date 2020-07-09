@@ -18,7 +18,14 @@ export const cretePlaceList = asyncWrapper(async (req, res) => {
 
   const requestSchema = Joi.object().keys({
     title: Joi.string().required(),
-    placeIds: Joi.array().items(Joi.string()).required(),
+    places: Joi.array()
+      .items(
+        Joi.object().keys({
+          id: Joi.string().required(),
+          name: Joi.string().required(),
+        })
+      )
+      .required(),
   });
 
   const { error } = requestSchema.validate(req.body);
@@ -56,7 +63,9 @@ export const getPlaceListById = asyncWrapper(async (req, res) => {
  * [GET] /api/place-lists/users/:id?group=groupName - 특정 유저의 맛집 리스트들을 가져옴
  */
 export const getPlaceListsByUserId = asyncWrapper(async (req, res) => {
-  const { userId } = req.user;
+  let userId = null;
+  if (req.user) userId = req.user.userId;
+
   const { id } = req.params;
   const { group } = req.query;
 
@@ -79,6 +88,7 @@ export const getPlaceListsByUserId = asyncWrapper(async (req, res) => {
       ? await placeListModel.getAllPlaceListsByUserId(id)
       : await placeListModel.getPublicPlaceListsByUserId(id);
   }
+
   res.json(placeLists);
 });
 
@@ -91,7 +101,12 @@ export const updatePlaceListById = asyncWrapper(async (req, res) => {
 
   const requestSchema = Joi.object().keys({
     title: Joi.string(),
-    placeIds: Joi.array().items(Joi.string()),
+    places: Joi.array().items(
+      Joi.object().keys({
+        id: Joi.string().required(),
+        name: Joi.string().required(),
+      })
+    ),
   });
 
   if (!ObjectId.isValid(id)) return res.badRequest("Unexpected ObjectId"); // ObjectId 검증 실패
@@ -160,6 +175,13 @@ export const makePlaceListPrivate = asyncWrapper(async (req, res) => {
 
   placeList = await placeListModel.makePlaceListPrivate(id);
   res.json(placeList);
+});
+
+export const getGroupsByUserId = asyncWrapper(async (req, res) => {
+  const { userId } = req.params;
+
+  const groups = await groupModel.getGroupNames(userId);
+  res.json(groups);
 });
 
 /**

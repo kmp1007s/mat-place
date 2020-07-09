@@ -1,6 +1,7 @@
 import { Model, model, Types } from "mongoose";
 import PlaceListSchema from "./schema";
 import PlaceListDocument from "./document";
+import { Place } from "./document";
 
 type MongooseId = string | Types.ObjectId;
 
@@ -9,27 +10,29 @@ interface PlaceListModel extends Model<PlaceListDocument> {
     userId: string,
     placeListInfo: {
       title: string;
-      placeIds: Array<string>;
+      places: Array<Place>;
     }
   ): Promise<PlaceListDocument>;
-  getAllPlaceListsByUserId(userId: string): Promise<Array<PlaceListDocument>>;
+  getAllPlaceListsByUserId(
+    userId: string
+  ): Promise<Array<PlaceListDocument> | null>;
   getPublicPlaceListsByUserId(
     userId: string
-  ): Promise<Array<PlaceListDocument>>;
+  ): Promise<Array<PlaceListDocument> | null>;
   getPlaceListById(_id: MongooseId): Promise<PlaceListDocument>;
   getAllPlaceListsByGroups(
     userId: string,
     group: string
-  ): Promise<Array<PlaceListDocument>>;
+  ): Promise<Array<PlaceListDocument> | null>;
   getPublicPlaceListsByGroups(
     userId: string,
     group: string
-  ): Promise<Array<PlaceListDocument>>;
+  ): Promise<Array<PlaceListDocument> | null>;
   updatePlaceListById(
     _id: MongooseId,
     toUpdate: {
       title?: string;
-      placeIds?: Array<String>;
+      places?: Array<Place>;
     }
   ): Promise<PlaceListDocument>;
   deletePlaceListById(_id: MongooseId): Promise<void>;

@@ -73,5 +73,6 @@ export const tokenCheck = asyncWrapper(async (req, res) => {
  * [POST] /api/auth/logout - 로그아웃
  */
 export const logout = asyncWrapper(async (req, res) => {
-  res.status(200).clearCookie("token").redirect("/");
+  // res.clearCookie("token").status(204).end();
+  res.clearCookie("token").redirect(204, "/");
 });

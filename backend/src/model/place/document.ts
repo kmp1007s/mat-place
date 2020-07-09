@@ -1,18 +1,14 @@
 import { Document } from "mongoose";
 
-// interface Place {
-//   id: string;
-//   place_name: string;
-//   category_name: string;
-//   phone: string;
-//   road_address_name: string;
-//   place_url: string;
-// }
+export interface Place {
+  id: string;
+  name: string;
+}
 
 export default interface PlaceListDocument extends Document {
   userId: string;
   title: string;
-  placeIds: Array<String>;
+  places: Array<Place>;
   public: boolean;
   createdAt: Date;
 }

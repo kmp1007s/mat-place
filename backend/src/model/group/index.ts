@@ -10,24 +10,21 @@ interface GroupModel extends Model<GroupDocument> {
       placeListIds?: Array<Types.ObjectId | string>;
     }
   ): Promise<GroupDocument>;
-  getGroupByGroupName(
-    userId: string,
-    groupName: string
-  ): Promise<GroupDocument>;
-  getGroupNames(userId: string): Promise<Array<string>>;
+  getGroupByGroupName(userId: string, name: string): Promise<GroupDocument>;
+  getGroupNames(userId: string): Promise<Array<string> | null>;
   getPlaceListIdsByGroupName(
     userId: string,
-    groupName: string
+    name: string
   ): Promise<Array<Types.ObjectId>>;
   updateGroup(
     userId: string,
-    groupName: string,
+    name: string,
     toUpdate: {
       nameUpdateTo?: string;
       placeListIds?: Array<Types.ObjectId>;
     }
   ): Promise<GroupDocument>;
-  deleteGroup(userId: string, groupName: string): Promise<void>;
+  deleteGroup(userId: string, name: string): Promise<void>;
 }
 
 const Group: GroupModel = model<GroupDocument, GroupModel>(

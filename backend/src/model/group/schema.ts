@@ -2,13 +2,16 @@ import { Schema } from "mongoose";
 
 const GroupSchema = new Schema({
   userId: String,
-  groupName: String,
+  name: String,
   placeListIds: { type: [Schema.Types.ObjectId], default: [] },
   createdAt: { type: Date, default: Date.now },
 });
 
 GroupSchema.statics.createGroup = async function (userId, group) {
-  return new this({ userId, group }).save();
+  return new this({
+    userId,
+    ...group,
+  }).save();
 };
 
 GroupSchema.statics.getGroupNames = function (userId) {
@@ -16,32 +19,31 @@ GroupSchema.statics.getGroupNames = function (userId) {
     const groupNames = [];
     const groupDocs = await this.find({ userId });
     groupDocs.forEach((groupDoc) => {
-      groupNames.push(groupDoc.groupName);
+      groupNames.push(groupDoc.name);
     });
-    resolve(groupNames);
+
+    if (groupNames.length > 0) resolve(groupNames);
+    else resolve(null);
   });
 };
 
-GroupSchema.statics.getGroupByGroupName = function (userId, groupName) {
-  return this.findOne({ userId, groupName });
+GroupSchema.statics.getGroupByGroupName = function (userId, name) {
+  return this.findOne({ userId, name });
 };
 
-GroupSchema.statics.getPlaceListIdsByGroupName = async function (
-  userId,
-  groupName
-) {
-  const groupDoc = await this.findOne({ userId, groupName });
+GroupSchema.statics.getPlaceListIdsByGroupName = async function (userId, name) {
+  const groupDoc = await this.findOne({ userId, name });
   if (groupDoc) return groupDoc.placeListIds;
 };
 
-GroupSchema.statics.updateGroup = function (userId, groupName, toUpdate) {
-  return this.findOneAndUpdate({ userId, groupName }, toUpdate, {
+GroupSchema.statics.updateGroup = function (userId, name, toUpdate) {
+  return this.findOneAndUpdate({ userId, name }, toUpdate, {
     new: true,
   });
 };
 
-GroupSchema.statics.deleteGroup = function (userId, groupName) {
-  return this.deleteOne({ userId, groupName });
+GroupSchema.statics.deleteGroup = function (userId, name) {
+  return this.deleteOne({ userId, name });
 };
 
 export default GroupSchema;
