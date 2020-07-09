@@ -15,7 +15,7 @@ const defaultStyle = (props: ButtonProps & ThemeProps) => css`
     background-color: ${props.theme.color.PRIMARY_LIGHT};
     border: 1px solid transparent;
     color: ${props.theme.color.WHITE_LIGHT};
-    transition: all 0.4s;
+    transition: all 0.4s ease;
   }
 `;
 
@@ -28,18 +28,19 @@ const invertStyle = (props: ButtonProps & ThemeProps) => css`
     border: 1px solid ${props.theme.color.WHITE};
     background-color: transparent;
     color: ${props.theme.color.WHITE};
-    transition: all 0.4s;
+    transition: all 0.4s ease;
   }
 `;
 
 const Button = styled.button<ButtonProps>`
-  padding: 8px 12px;
+  padding: 5px 15px;
   border-radius: 3px;
   font-size: 1rem;
   font-weight: 400;
   width: ${(props) => (props.full ? "90%" : "auto")};
-  margin: 1rem;
-  transition: all 1s;
+  margin: 16px;
+  transition: all 1s ease;
+  cursor: pointer;
   user-select: none;
 
   &:focus {
