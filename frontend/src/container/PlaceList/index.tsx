@@ -1,1 +1,1 @@
-export { default } from "./PlaceListContainer";
+export { default } from "./PlaceListsContainer";

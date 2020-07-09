@@ -35,10 +35,11 @@ const widthFlip = keyframes`
 export const RootContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: flex-start;
   align-content: center;
   justify-content: center;
   background-color: ${(props) => props.theme.color.PRIMARY_LIGHT};
+  height: 100%;
 
   & > * {
     flex-basis: 100%;

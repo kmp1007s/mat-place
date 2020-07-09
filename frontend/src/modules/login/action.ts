@@ -7,6 +7,10 @@ export const LOGIN_SUCCESS = "login/LOGIN_SUCCESS";
 export const LOGIN_FAIL = "login/LOGIN_FAIL";
 export const LOGIN_RESET = "login/LOGIN_RESET";
 
+export const LOGOUT = "login/LOGOUT";
+export const LOGOUT_SUCCESS = "login/LOGOUT_SUCCESS";
+export const LOGOUT_FAIL = "login/LOGOUT_FAIL";
+
 export const REGISTER = "login/REGISTER";
 export const REGISTER_SUCCESS = "login/REGISTER_SUCCESS";
 export const REGISTER_FAIL = "login/REGISTER_FAIL";
@@ -20,6 +24,10 @@ export const login = createAction(LOGIN)<LoginParam>();
 export const loginSuccess = createAction(LOGIN_SUCCESS)<string>();
 export const loginFail = createAction(LOGIN_FAIL)();
 export const loginReset = createAction(LOGIN_RESET)();
+
+export const logout = createAction(LOGOUT)();
+export const logoutSuccess = createAction(LOGOUT_SUCCESS)();
+export const logoutFail = createAction(LOGOUT_FAIL)();
 
 export const register = createAction(REGISTER)<ReigsterParam>();
 export const registerSuccess = createAction(REGISTER_SUCCESS)<string>();

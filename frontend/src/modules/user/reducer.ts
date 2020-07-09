@@ -1,6 +1,11 @@
 import { UserState, UserAction } from "./type";
 import { createReducer } from "typesafe-actions";
-import { GET_USER, GET_USER_SUCCESS, GET_USER_FAIL } from "./action";
+import {
+  GET_USER,
+  GET_USER_SUCCESS,
+  GET_USER_FAIL,
+  UPDATE_USER_SUCCESS,
+} from "./action";
 
 const initialState: UserState = {
   user: null,
@@ -18,6 +23,10 @@ const reducer = createReducer<UserState, UserAction>(initialState, {
     ...state,
     user: null,
     loading: "FAIL",
+  }),
+  [UPDATE_USER_SUCCESS]: (state, action) => ({
+    ...state,
+    user: action.payload,
   }),
 });
 export default reducer;

@@ -6,4 +6,5 @@ export type LoadingState = "UNSTARTED" | "STARTED" | "SUCCESS" | "FAIL";
 export type PlaceAction = ActionType<typeof actions>;
 export type PlaceState = {
   placeLists: PlaceLists | undefined;
+  loading: LoadingState;
 };

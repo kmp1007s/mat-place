@@ -8,6 +8,7 @@ import {
 
 const initialState: PlaceState = {
   placeLists: undefined,
+  loading: "UNSTARTED",
 };
 
 const reducer = createReducer<PlaceState, PlaceAction>(initialState, {

@@ -1,8 +1,8 @@
 export const WHITE = "#ffffff";
-export const WHITE_LIGHT = "#f7f7fc";
+export const WHITE_LIGHT = "#f7f7f7";
 
 export const BLACK = "#000000";
-export const BLACK_LIGHT = "#29292b";
+export const BLACK_LIGHT = "#383838";
 
 export const GRAY = "#939199";
 export const GRAY_LIGHT = "#BDBAC4";
@@ -15,3 +15,7 @@ export const PRIMARY_DARK = "#4618BA";
 export const SECONDARY = "#2f5bf9";
 export const SECONDARY_LIGHT = "#936bf9";
 export const SECONDARY_DARK = "#254ac4";
+
+export const RED = "#f73131";
+
+export const GREEN = "#31f734";

@@ -4,16 +4,21 @@ import IndexPage from "page/Index";
 import NotFoundPage from "page/NotFound";
 import LoginPage from "page/Login";
 import UserRoutes from "route/Users";
+import Header from "component/Common/Header";
+import PageTemplate from "component/Common/PageTemplate";
 
 function Routes() {
   return (
     <BrowserRouter>
-      <Switch>
-        <Route exact path="/" component={IndexPage} />
-        <Route exact path="/login" component={LoginPage} />
-        <Route path="/users" component={UserRoutes} />
-        <Route component={NotFoundPage} />
-      </Switch>
+      <Header />
+      <PageTemplate>
+        <Switch>
+          <Route exact path="/" component={IndexPage} />
+          <Route exact path="/login" component={LoginPage} />
+          <Route path="/users" component={UserRoutes} />
+          <Route component={NotFoundPage} />
+        </Switch>
+      </PageTemplate>
     </BrowserRouter>
   );
 }

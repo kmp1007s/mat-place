@@ -3,6 +3,7 @@ import {
   loginSuccess,
   loginFail,
   loginReset,
+  logoutSuccess,
   register,
   registerSuccess,
   reigsterFail,
@@ -10,6 +11,7 @@ import {
   tokenCheckSuccess,
   tokenCheckFail,
   LOGIN,
+  LOGOUT,
   REGISTER,
   TOKEN_CHECK,
 } from "./action";
@@ -38,6 +40,7 @@ function* registerSaga(action: ReturnType<typeof register>) {
       action.payload
     );
     yield put(registerSuccess(data.userId));
+    yield put(loginReset());
   } catch (e) {
     console.log(e);
     yield put(reigsterFail());
@@ -54,8 +57,18 @@ function* tokenCheckSaga(action: ReturnType<typeof tokenCheck>) {
   }
 }
 
+function* logoutSaga() {
+  try {
+    yield call(api.logout);
+    yield put(logoutSuccess());
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 export function* loginsSaga() {
   yield takeEvery(LOGIN, loginSaga);
+  yield takeEvery(LOGOUT, logoutSaga);
   yield takeEvery(REGISTER, registerSaga);
   yield takeEvery(TOKEN_CHECK, tokenCheckSaga);
 }

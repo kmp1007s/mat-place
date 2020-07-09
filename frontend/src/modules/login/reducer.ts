@@ -9,6 +9,7 @@ import {
   REGISTER_SUCCESS,
   REGISTER_FAIL,
   TOKEN_CHECK_SUCCESS,
+  LOGOUT_SUCCESS,
 } from "./action";
 
 const initialState: LoginState = {
@@ -25,6 +26,7 @@ const reducer = createReducer<LoginState, LoginAction>(initialState, {
   }),
   [LOGIN_FAIL]: (state, action) => ({ ...state, loading: "FAIL" }),
   [LOGIN_RESET]: (state, action) => ({ ...state, loading: "UNSTARTED" }),
+  [LOGOUT_SUCCESS]: (state, action) => ({ ...state, userId: "" }),
   [REGISTER]: (state, action) => ({ ...state, loading: "STARTED" }),
   [REGISTER_SUCCESS]: (state, action) => ({
     ...state,

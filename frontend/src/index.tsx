@@ -4,7 +4,7 @@ import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 
-import SetColorCSS from "./schema/SetColorCSS";
+import GlobalStyle from "./schema/GlobalStyle";
 
 import { Provider } from "react-redux";
 import { createStore, applyMiddleware } from "redux";
@@ -13,7 +13,7 @@ import rootReducer, { rootSaga } from "./modules";
 import createSagaMiddleware from "redux-saga";
 
 import { composeWithDevTools } from "redux-devtools-extension";
-import logger from "redux-logger";
+// import logger from "redux-logger";
 
 import { ThemeProvider } from "emotion-theming";
 import * as colors from "schema/colors";
@@ -21,7 +21,7 @@ import * as colors from "schema/colors";
 const sagaMiddleware = createSagaMiddleware(); // 사가 미들웨어 생성
 const store = createStore(
   rootReducer,
-  composeWithDevTools(applyMiddleware(sagaMiddleware, logger))
+  composeWithDevTools(applyMiddleware(sagaMiddleware))
 ); // 미들웨어 적용
 
 const theme = {
@@ -34,7 +34,7 @@ sagaMiddleware.run(rootSaga); // 루트 사가 실행
 
 ReactDOM.render(
   <React.StrictMode>
-    <SetColorCSS />
+    <GlobalStyle />
     <ThemeProvider theme={theme}>
       <Provider store={store}>
         <App />

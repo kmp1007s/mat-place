@@ -37,5 +37,26 @@ body {
 #root > div {
   width: inherit;
   height: inherit;
-  overflow: auto;
+  /* overflow: auto; */
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 15px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: var(--gray_light);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--gray);
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gray_dark);
 }
