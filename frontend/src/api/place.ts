@@ -1,18 +1,32 @@
 import { request } from "lib/axios";
 
-type MongoResponse = {
+type MongoId = {
   _id: string;
 };
 
-export type PlaceList = MongoResponse & {
-  placeIds: Array<string>;
+export type Place = MongoId & {
+  id: string;
+  name: string;
+};
+
+export type PlaceList = MongoId & {
+  places: Array<Place>;
   public: boolean;
   userId: string;
   title: string;
   createdAt: string;
 };
 
-export type PlaceLists = Array<PlaceList>;
+export type PlaceLists = Array<PlaceList> | null;
 
 export const getPlaceListsByUser = (userId: string) =>
-  request<PlaceLists, void>("GET", `place-lists/users/${userId}`);
+  request<PlaceLists, void>({
+    method: "GET",
+    url: `place-lists/users/${userId}`,
+  });
+
+export const getGroupByUser = (userId: string) =>
+  request<Array<string> | null, void>({
+    method: "GET",
+    url: `place-lists/groups/${userId}`,
+  });

@@ -14,4 +14,23 @@ export type UserResponse = MongoResponse & {
 };
 
 export const getUserById = (userId: string) =>
-  request<UserResponse, string>("GET", `profiles/${userId}`, userId);
+  request<UserResponse, string>({
+    method: "GET",
+    url: `profiles/${userId}`,
+    data: userId,
+  });
+
+export const updateUserByUserId = (param: {
+  userId: string;
+  userName: string;
+}) => {
+  const { userId, userName } = param;
+
+  return request<UserResponse, object>({
+    method: "PATCH",
+    url: `profiles/${userId}`,
+    data: {
+      userName,
+    },
+  });
+};
