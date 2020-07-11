@@ -4,5 +4,7 @@ export function parse(toParse: string) {
 
 export function format(date: Date | string) {
   if (typeof date === "string") date = parse(date);
-  return `${date.getFullYear()}.${date.getMonth()}.${date.getDay()}`;
+
+  // month 0부터 시작
+  return `${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}`;
 }

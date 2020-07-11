@@ -10,8 +10,6 @@ const PlaceListWrapper = styled.div`
   position: relative;
   left: 50%;
   transform: translateX(-50%);
-  overflow: auto;
-  // border: 1px solid ${(props) => props.theme.color.GRAY_LIGHT};
   border-radius: 5px;
   margin-bottom: 32px;
 

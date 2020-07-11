@@ -4,6 +4,9 @@ import {
   GET_PLACELISTS_USER,
   GET_PLACELISTS_USER_SUCCESS,
   GET_PLACELISTS_USER_FAIL,
+  ADD_PLACELIST_SUCCESS,
+  UPDATE_PLACELIST_SUCCESS,
+  DELETE_PLACELIST_SUCCESS,
 } from "./action";
 
 const initialState: PlaceState = {
@@ -21,6 +24,22 @@ const reducer = createReducer<PlaceState, PlaceAction>(initialState, {
   [GET_PLACELISTS_USER_FAIL]: (state, action) => ({
     ...state,
     loading: "FAIL",
+  }),
+  [ADD_PLACELIST_SUCCESS]: (state, action) => ({
+    ...state,
+    placeLists: state.placeLists
+      ? state.placeLists.concat(action.payload)
+      : [action.payload],
+  }),
+  [UPDATE_PLACELIST_SUCCESS]: (state, action) => ({
+    ...state,
+    placeLists: state.placeLists?.concat(action.payload),
+  }),
+  [DELETE_PLACELIST_SUCCESS]: (state, action) => ({
+    ...state,
+    placeLists: state.placeLists?.filter(
+      (placeList) => placeList._id !== action.payload
+    ),
   }),
 });
 export default reducer;

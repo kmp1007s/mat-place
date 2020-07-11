@@ -19,7 +19,6 @@ export const PlaceListBox = styled(Flex)`
   justify-content: flex-start;
   align-items: flex-start;
   background-color: transparent;
-  margin-bottom: 1px;
   padding: 18px;
   width: 100%;
   border-bottom: 1px solid ${(props) => props.theme.color.GRAY_LIGHT};
@@ -89,6 +88,8 @@ const IconWrapper = styled.div`
 type Props = TypePlaceList & {
   showOwner?: boolean;
   isOwner: boolean;
+  onEditClick: Function;
+  onDeleteClick: Function;
 };
 
 function PlaceList(props: Props) {
@@ -108,8 +109,17 @@ function PlaceList(props: Props) {
             // 수정 권한이 있는 경우
             props.isOwner && (
               <>
-                <Edit />
-                <Delete />
+                <Edit
+                  onClick={() => {
+                    props.onEditClick();
+                  }}
+                />
+                <Delete
+                  onClick={() => {
+                    console.log(props._id);
+                    props.onDeleteClick(props._id);
+                  }}
+                />
               </>
             )
           }

@@ -138,7 +138,7 @@ export const deletePlaceListById = asyncWrapper(async (req, res) => {
 
   await placeListModel.deletePlaceListById(id);
 
-  res.status(204);
+  res.status(204).end();
 });
 
 /**

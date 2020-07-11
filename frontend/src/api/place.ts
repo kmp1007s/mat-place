@@ -1,15 +1,13 @@
 import { request } from "lib/axios";
 
-type MongoId = {
-  _id: string;
-};
-
-export type Place = MongoId & {
+export type Place = {
+  _id?: string;
   id: string;
   name: string;
 };
 
-export type PlaceList = MongoId & {
+export type PlaceList = {
+  _id?: string;
   places: Array<Place>;
   public: boolean;
   userId: string;
@@ -29,4 +27,29 @@ export const getGroupByUser = (userId: string) =>
   request<Array<string> | null, void>({
     method: "GET",
     url: `place-lists/groups/${userId}`,
+  });
+
+type AddPlaceListParam = { title: string; places: Array<Place> };
+export const addPlaceList = (data: AddPlaceListParam) =>
+  request<PlaceList, AddPlaceListParam>({
+    method: "POST",
+    url: "place-lists",
+    data,
+  });
+
+type UpdatePlaceListParam = { title?: string; places?: Array<Place> };
+export const updatePlaceList = (
+  placeListId: string,
+  data: UpdatePlaceListParam
+) =>
+  request<PlaceList, UpdatePlaceListParam>({
+    method: "PATCH",
+    url: `place-lists/${placeListId}`,
+    data,
+  });
+
+export const deletePlaceList = (placeListId: string) =>
+  request<void, void>({
+    method: "DELETE",
+    url: `place-lists/${placeListId}`,
   });

@@ -25,6 +25,12 @@ const Wrapper = styled.div`
     0 4px 6px -2px rgba(0, 0, 0, 0.05);
   border-radius: 4px;
   animation: ${topSlide} 0.8s ease;
+  text-align: center;
+  font-size: 1rem;
+
+  & > div:first-child {
+    text-align: left;
+  }
 `;
 
 const CloseBtn = styled(AiFillCloseCircle)`

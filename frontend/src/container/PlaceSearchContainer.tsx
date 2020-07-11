@@ -7,7 +7,9 @@ import ListItem from "component/Common/PlaceSearch/ListItem";
 
 import { keywordSearch } from "api/kakao/place";
 
-type Props = {};
+type Props = {
+  onListItemClick: Function;
+};
 
 function PlaceSearchContainer(props: Props) {
   const [searchResult, setSearchResult] = useState<Array<any> | null>([]);
@@ -40,7 +42,15 @@ function PlaceSearchContainer(props: Props) {
         <ListWrapper>
           {searchResult ? (
             searchResult.map((item, idx) => (
-              <ListItem key={idx}>
+              <ListItem
+                key={idx}
+                onClick={(e) => {
+                  props.onListItemClick({
+                    id: item.id,
+                    place_name: item.place_name,
+                  });
+                }}
+              >
                 <div className="placeName">{item.place_name}</div>
                 <div className="addressName">{item.address_name}</div>
               </ListItem>

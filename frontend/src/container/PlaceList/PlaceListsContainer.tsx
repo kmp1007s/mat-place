@@ -2,18 +2,19 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import { RootState } from "modules";
-import { getPlaceListsByUser } from "modules/placeList";
+import { getPlaceListsByUser, deletePlaceList } from "modules/placeList";
 
 import PlaceList from "component/Place/PlaceList";
 import PlaceListsWrapper from "component/Place/PlaceListsWrapper";
 import { PlaceListBox } from "component/Place/PlaceList";
-import TopAlert from "component/Common/TopAlert";
 
-import PlaceSearchContainer from "container/PlaceSearchContainer";
+import AddInputBoxContainer from "container/PlaceList/AddInputBoxContainer";
 
 import { AiOutlinePlus } from "react-icons/ai";
 
 import styled from "lib/styled";
+import TopAlert from "component/Common/TopAlert";
+import Button from "component/Common/Button";
 
 const AddBox = styled(PlaceListBox)`
   background-color: ${(props) => props.theme.color.PRIMARY};
@@ -37,7 +38,12 @@ type Props = {
 function PlaceListContainer(props: Props) {
   const dispatch = useDispatch();
 
-  const [showSearch, setShowSearch] = useState(false);
+  const [showAddInputBox, setShowAddInputBox] = useState(false);
+  const [showDeleteBox, setShowDeleteBox] = useState<{
+    targetId: string;
+    toShow: boolean;
+  }>({ targetId: "", toShow: false });
+
   const { placeLists, loading } = useSelector(
     (state: RootState) => state.placeList
   );
@@ -59,14 +65,25 @@ function PlaceListContainer(props: Props) {
                 key={placeList._id}
                 showOwner={false}
                 isOwner={isOwner}
+                onEditClick={(placeListId: string) => {}}
+                onDeleteClick={(placeListId: string) => {
+                  setShowDeleteBox({ targetId: placeListId, toShow: true });
+                }}
               />
             ))}
+            {showAddInputBox && (
+              <AddInputBoxContainer
+                onNegativeButtonClick={() => {
+                  setShowAddInputBox(false);
+                }}
+              />
+            )}
             {
               // 수정 권한이 있는 경우
               isOwner && (
                 <AddBox
                   onClick={(e) => {
-                    setShowSearch(true);
+                    setShowAddInputBox(true);
                   }}
                 >
                   <Add size={22} />
@@ -74,13 +91,32 @@ function PlaceListContainer(props: Props) {
               )
             }
           </PlaceListsWrapper>
-          {showSearch && (
+          {showDeleteBox.toShow && (
             <TopAlert
               onClose={() => {
-                setShowSearch(false);
+                setShowDeleteBox({ targetId: "", toShow: false });
               }}
             >
-              <PlaceSearchContainer />
+              <div>삭제하시겠습니까?</div>
+              <div>
+                <Button
+                  onClick={(e) => {
+                    if (showDeleteBox.targetId) {
+                      dispatch(deletePlaceList(showDeleteBox.targetId));
+                      setShowDeleteBox({ targetId: "", toShow: false });
+                    }
+                  }}
+                >
+                  예
+                </Button>
+                <Button
+                  onClick={(e) => {
+                    setShowDeleteBox({ targetId: "", toShow: false });
+                  }}
+                >
+                  아니오
+                </Button>
+              </div>
             </TopAlert>
           )}
         </>
