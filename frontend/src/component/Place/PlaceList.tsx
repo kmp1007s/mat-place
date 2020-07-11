@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import styled from "lib/styled";
 import * as dateUtil from "lib/dateUtil";
@@ -12,8 +12,12 @@ import Date from "component/Place/Date";
 import BottomWrapper from "component/Place/BottomWrapper";
 
 import PlaceContainer from "container/PlaceContainer";
+import AddInputBoxContainer from "container/PlaceList/AddInputBoxContainer";
 
-import { AiOutlineClose, AiFillEdit } from "react-icons/ai";
+import { AiOutlineClose, AiFillEdit, AiOutlineCheck } from "react-icons/ai";
+
+import { useDispatch } from "react-redux";
+import { updatePlaceList } from "modules/placeList";
 
 export const PlaceListBox = styled(Flex)`
   justify-content: flex-start;
@@ -85,6 +89,14 @@ const IconWrapper = styled.div`
   padding: 4px;
 `;
 
+const PublicContainer = styled.div`
+  margin-left: 8px;
+  display: inline-block;
+  color: ${(props) => props.theme.color.GREEN};
+  font-size: 0.9rem;
+  user-select: none;
+`;
+
 type Props = TypePlaceList & {
   showOwner?: boolean;
   isOwner: boolean;
@@ -93,38 +105,83 @@ type Props = TypePlaceList & {
 };
 
 function PlaceList(props: Props) {
+  const [isEdit, setIsEdit] = useState(false);
+  const dispatch = useDispatch();
+
   return (
     <PlaceListBox>
-      <Title>{props.title}</Title>
-      {props.places.map((place, idx) => (
-        <PlaceContainer key={idx} {...place} />
-      ))}
-      {props.showOwner && <div>{props.userId}</div>}
-      <BottomWrapper>
-        <Date>{dateUtil.format(props.createdAt)}</Date>
-        <IconWrapper>
-          <FaceBook />
-          <Kakao />
-          {
-            // 수정 권한이 있는 경우
-            props.isOwner && (
-              <>
-                <Edit
-                  onClick={() => {
-                    props.onEditClick();
-                  }}
-                />
-                <Delete
-                  onClick={() => {
-                    console.log(props._id);
-                    props.onDeleteClick(props._id);
-                  }}
-                />
-              </>
-            )
-          }
-        </IconWrapper>
-      </BottomWrapper>
+      {isEdit && (
+        <AddInputBoxContainer
+          existPlaces={props.places}
+          existTitle={props.title}
+          onPositiveButtonClick={(inputTitle: string, places: Array<any>) => {
+            if (props._id) {
+              dispatch(
+                updatePlaceList([
+                  [
+                    props._id,
+                    {
+                      title: inputTitle,
+                      places: places,
+                    },
+                  ],
+                  {
+                    afterTodo: () => {
+                      setIsEdit(false);
+                    },
+                  },
+                ])
+              );
+            }
+          }}
+          onNegativeButtonClick={() => {
+            setIsEdit(false);
+          }}
+        />
+      )}
+      {!isEdit && (
+        <>
+          <Title>
+            {props.title}
+            {props.public && (
+              <PublicContainer>
+                <AiOutlineCheck />
+                <span>공개된 리스트입니다</span>
+              </PublicContainer>
+            )}
+          </Title>
+          {props.places.map((place, idx) => (
+            <PlaceContainer key={idx} {...place} />
+          ))}
+          {props.showOwner && <div>{props.userId}</div>}
+          <BottomWrapper>
+            <Date>{dateUtil.format(props.createdAt)}</Date>
+            <IconWrapper>
+              <FaceBook />
+              <Kakao />
+              {
+                // 수정 권한이 있는 경우
+                props.isOwner && (
+                  <>
+                    <Edit
+                      onClick={() => {
+                        setIsEdit(true);
+                        props.onEditClick();
+                      }}
+                    />
+                    <Delete
+                      onClick={() => {
+                        console.log(props._id);
+                        props.onDeleteClick(props._id);
+                      }}
+                    />
+                  </>
+                )
+              }
+            </IconWrapper>
+          </BottomWrapper>
+        </>
+      )}
     </PlaceListBox>
   );
 }

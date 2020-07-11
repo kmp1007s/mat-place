@@ -32,7 +32,7 @@ export const addPlaceListSuccess = createAction(ADD_PLACELIST_SUCCESS)<
 export const addPlaceListFail = createAction(ADD_PLACELIST_FAIL)();
 
 export const updatePlaceList = createAction(UPDATE_PLACELIST)<
-  Parameters<typeof api.updatePlaceList>
+  [Parameters<typeof api.updatePlaceList>, { afterTodo: Function }]
 >();
 export const updatePlaceListSuccess = createAction(UPDATE_PLACELIST_SUCCESS)<
   api.PlaceList

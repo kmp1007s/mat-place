@@ -16,6 +16,6 @@ export const SECONDARY = "#2f5bf9";
 export const SECONDARY_LIGHT = "#936bf9";
 export const SECONDARY_DARK = "#254ac4";
 
-export const RED = "#f73131";
+export const RED = "#ed4528";
 
-export const GREEN = "#31f734";
+export const GREEN = "#64d339";

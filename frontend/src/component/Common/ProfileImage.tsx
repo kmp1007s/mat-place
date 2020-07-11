@@ -14,6 +14,12 @@ const StyledImage = styled.img`
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
     0 2px 4px -1px rgba(0, 0, 0, 0.06);
   user-select: none;
+  cursor: pointer;
+  transition: all 0.4s ease;
+
+  &:hover {
+    transform: scale(1.01);
+  }
 `;
 
 function Profile(props: Props) {

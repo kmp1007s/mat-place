@@ -51,10 +51,10 @@ function* updatePlaceListSaga(action: ReturnType<typeof updatePlaceList>) {
   try {
     const { data }: AxiosResponse<api.PlaceList> = yield call(
       api.updatePlaceList,
-      ...action.payload
+      ...action.payload[0]
     );
-
     yield put(updatePlaceListSuccess(data));
+    action.payload[1].afterTodo();
   } catch (e) {
     console.log(e);
     yield put(updatePlaceListFail());

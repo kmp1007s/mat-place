@@ -33,7 +33,9 @@ const reducer = createReducer<PlaceState, PlaceAction>(initialState, {
   }),
   [UPDATE_PLACELIST_SUCCESS]: (state, action) => ({
     ...state,
-    placeLists: state.placeLists?.concat(action.payload),
+    placeLists: state.placeLists?.map((placeList) =>
+      placeList._id === action.payload._id ? action.payload : placeList
+    ),
   }),
   [DELETE_PLACELIST_SUCCESS]: (state, action) => ({
     ...state,
