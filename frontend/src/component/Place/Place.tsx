@@ -77,8 +77,8 @@ function Place(props: Props) {
         </Image>
         <div className="linkText">{props.name}</div>
       </a>
-      <div>서울 강남구 삼성동 159</div>
-      <div>02-6002-1880</div>
+      <div>{props.address}</div>
+      <div>{props.phone || "전화번호가 없습니다"}</div>
     </Wrapper>
   );
 }

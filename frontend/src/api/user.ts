@@ -34,3 +34,15 @@ export const updateUserByUserId = (param: {
     },
   });
 };
+
+type UpdateUserImageResponse = { imgName: string };
+export const updateUserImage = (userId: string, image: File) => {
+  const formData = new FormData();
+  formData.append("img", image);
+
+  return request<UpdateUserImageResponse, FormData>({
+    method: "POST",
+    url: `profiles/${userId}/image`,
+    data: formData,
+  });
+};

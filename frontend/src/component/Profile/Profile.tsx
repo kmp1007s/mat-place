@@ -2,7 +2,7 @@ import React from "react";
 import { UserResponse } from "api/user";
 
 import Flex from "component/Common/Flex";
-import ProfileImage from "component/Common/ProfileImage";
+import ProfileImageContainer from "container/Profile/ProfileImageContainer";
 import Button from "component/Common/Button";
 import EditIcon from "component/Profile/EditIcon";
 import CheckIcon from "component/Profile/CheckIcon";
@@ -30,7 +30,11 @@ function Profile(props: Props) {
   return (
     <ProfileBox>
       <Flex padding={30}>
-        <ProfileImage path={user.profile.image} />
+        <ProfileImageContainer
+          path={user.profile.image}
+          userId={user.userId}
+          isOwner={isOwner}
+        />
         <TextWrapper>
           <UserId>{user.userId}</UserId>
           {isEdit ? (

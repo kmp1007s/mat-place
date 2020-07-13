@@ -48,6 +48,8 @@ function PlaceSearchContainer(props: Props) {
                   props.onListItemClick({
                     id: item.id,
                     place_name: item.place_name,
+                    address_name: item.address_name,
+                    phone: item.phone,
                   });
                 }}
               >

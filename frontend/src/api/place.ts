@@ -4,6 +4,8 @@ export type Place = {
   _id?: string;
   id: string;
   name: string;
+  address: string;
+  phone: string;
 };
 
 export type PlaceList = {
@@ -29,7 +31,11 @@ export const getGroupByUser = (userId: string) =>
     url: `place-lists/groups/${userId}`,
   });
 
-type AddPlaceListParam = { title: string; places: Array<Place> };
+type AddPlaceListParam = {
+  title: string;
+  places: Array<Place>;
+  public: boolean;
+};
 export const addPlaceList = (data: AddPlaceListParam) =>
   request<PlaceList, AddPlaceListParam>({
     method: "POST",
@@ -37,7 +43,11 @@ export const addPlaceList = (data: AddPlaceListParam) =>
     data,
   });
 
-type UpdatePlaceListParam = { title?: string; places?: Array<Place> };
+type UpdatePlaceListParam = {
+  title?: string;
+  places?: Array<Place>;
+  public?: boolean;
+};
 export const updatePlaceList = (
   placeListId: string,
   data: UpdatePlaceListParam

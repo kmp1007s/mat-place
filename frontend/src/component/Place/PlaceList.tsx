@@ -18,6 +18,7 @@ import { AiOutlineClose, AiFillEdit, AiOutlineCheck } from "react-icons/ai";
 
 import { useDispatch } from "react-redux";
 import { updatePlaceList } from "modules/placeList";
+import { Link } from "react-router-dom";
 
 export const PlaceListBox = styled(Flex)`
   justify-content: flex-start;
@@ -33,11 +34,18 @@ export const PlaceListBox = styled(Flex)`
   }
 `;
 
-const Title = styled.div`
+const Title = styled(Link)`
+  display: inline-block;
   font-weight: 700;
   font-size: 1.2rem;
   margin-bottom: 16px;
   color: ${(props) => props.theme.color.GRAY_DARK};
+  text-decoration: none;
+  transition: all 0.2s ease;
+
+  &:hover {
+    color: ${(props) => props.theme.color.GRAY};
+  }
 `;
 
 const Delete = styled(AiOutlineClose)`
@@ -94,6 +102,7 @@ const PublicContainer = styled.div`
   display: inline-block;
   color: ${(props) => props.theme.color.GREEN};
   font-size: 0.9rem;
+  font-weight: 700;
   user-select: none;
 `;
 
@@ -109,12 +118,17 @@ function PlaceList(props: Props) {
   const dispatch = useDispatch();
 
   return (
-    <PlaceListBox>
+    <PlaceListBox id={`${props._id}`}>
       {isEdit && (
         <AddInputBoxContainer
           existPlaces={props.places}
           existTitle={props.title}
-          onPositiveButtonClick={(inputTitle: string, places: Array<any>) => {
+          existPublic={props.public}
+          onPositiveButtonClick={(
+            inputTitle: string,
+            places: Array<any>,
+            isPublic: boolean
+          ) => {
             if (props._id) {
               dispatch(
                 updatePlaceList([
@@ -123,6 +137,7 @@ function PlaceList(props: Props) {
                     {
                       title: inputTitle,
                       places: places,
+                      public: isPublic,
                     },
                   ],
                   {
@@ -141,15 +156,15 @@ function PlaceList(props: Props) {
       )}
       {!isEdit && (
         <>
-          <Title>
-            {props.title}
+          <div>
+            <Title to={`/place-lists/${props._id}`}>{props.title}</Title>
             {props.public && (
               <PublicContainer>
                 <AiOutlineCheck />
                 <span>공개된 리스트입니다</span>
               </PublicContainer>
             )}
-          </Title>
+          </div>
           {props.places.map((place, idx) => (
             <PlaceContainer key={idx} {...place} />
           ))}
@@ -157,8 +172,43 @@ function PlaceList(props: Props) {
           <BottomWrapper>
             <Date>{dateUtil.format(props.createdAt)}</Date>
             <IconWrapper>
-              <FaceBook />
-              <Kakao />
+              <FaceBook
+                onClick={(e) => {
+                  window.FB.ui(
+                    {
+                      display: "popup",
+                      method: "share",
+                      href: `http://localhost:3000/users/${props.userId}#${props._id}`,
+                    },
+                    function (response: any) {}
+                  );
+                }}
+              />
+              <Kakao
+                onClick={(e) => {
+                  window.Kakao.Link.sendDefault({
+                    objectType: "feed",
+                    content: {
+                      title: props.title,
+                      description: `${props.userId}님의 ${props.title} 맛집 리스트입니다`,
+                      imageUrl: "",
+                      link: {
+                        mobileWebUrl: `http://localhost:3000`,
+                        webUrl: `http://localhost:3000`,
+                      },
+                    },
+                    buttons: [
+                      {
+                        title: "바로가기",
+                        link: {
+                          mobileWebUrl: `http://localhost:3000/users/${props.userId}#${props._id}`,
+                          webUrl: `http://localhost:3000/users/${props.userId}#${props._id}`,
+                        },
+                      },
+                    ],
+                  });
+                }}
+              />
               {
                 // 수정 권한이 있는 경우
                 props.isOwner && (

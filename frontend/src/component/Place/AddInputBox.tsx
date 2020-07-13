@@ -69,6 +69,8 @@ type Props = {
   selectedPlaces: Array<any>;
   inputTitle: string;
   setInputTitle: any;
+  isPublic: boolean;
+  setIsPublic: any;
   onListItemClick: Function;
   onPositiveButtonClick: Function;
   onNegativeButtonClick: Function;
@@ -98,7 +100,13 @@ function AddInputBox(props: Props) {
       </div>
       <CheckboxArea>
         <span className="noticeText">이 리스트를 공개합니다</span>
-        <input type="checkbox" />
+        <input
+          type="checkbox"
+          checked={props.isPublic}
+          onChange={(e) => {
+            props.setIsPublic(!props.isPublic);
+          }}
+        />
       </CheckboxArea>
       <ButtonArea>
         <Button onClick={(e) => props.onPositiveButtonClick()}>확인</Button>

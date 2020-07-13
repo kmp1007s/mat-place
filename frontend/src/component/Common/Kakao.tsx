@@ -1,8 +1,8 @@
 import React from "react";
 import SnsButton from "./SnsButton";
 
-function Kakao() {
-  return <SnsButton src="/kakao-icon.svg" />;
+function Kakao(props: typeof SnsButton.defaultProps) {
+  return <SnsButton src="/kakao-icon.svg" {...props} />;
 }
 
 export default Kakao;

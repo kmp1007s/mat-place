@@ -61,8 +61,9 @@ const Logo = styled.span`
   float: left;
   line-height: 100px;
   margin-left: 3%;
-  font-size: 1.3rem;
+  font-size: 1.5rem;
   font-weight: 300;
+  color: ${(props) => props.theme.color.PRIMARY};
 `;
 
 type Props = {};
@@ -80,10 +81,7 @@ function Header(props: Props) {
         <ListItem>
           <Link to="/">메인</Link>
         </ListItem>
-        <ListItem>
-          <Link to="/login">로그인/회원가입</Link>
-        </ListItem>
-        {userId && (
+        {userId ? (
           <ListItem
             onClick={(e) => {
               dispatch(logout());
@@ -91,6 +89,10 @@ function Header(props: Props) {
             }}
           >
             <span>로그아웃</span>
+          </ListItem>
+        ) : (
+          <ListItem>
+            <Link to="/login">로그인/회원가입</Link>
           </ListItem>
         )}
         <ListItem>

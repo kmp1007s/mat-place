@@ -28,6 +28,10 @@ export async function request<T, K>(param: {
   // 카카오 REST API를 사용하면
   if (useKakao) axiosToUse = kakaoAxios;
 
+  if (data) {
+    console.log("axios request: ", data);
+  }
+
   const response = await axiosToUse.request<T>({
     method,
     url,

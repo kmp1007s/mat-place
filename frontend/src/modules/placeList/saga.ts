@@ -37,10 +37,14 @@ function* addPlaceListSaga(action: ReturnType<typeof addPlaceList>) {
   try {
     const { data }: AxiosResponse<api.PlaceList> = yield call(
       api.addPlaceList,
-      action.payload
+      action.payload[0]
     );
 
     yield put(addPlaceListSuccess(data));
+
+    if (action.payload[1].afterTodo) {
+      action.payload[1].afterTodo();
+    }
   } catch (e) {
     console.log(e);
     yield put(addPlaceListFail());

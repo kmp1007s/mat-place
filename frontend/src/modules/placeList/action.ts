@@ -24,7 +24,7 @@ export const getPlaceListsByUserSuccess = createAction(
 export const getPlaceListsByUserFail = createAction(GET_PLACELISTS_USER_FAIL)();
 
 export const addPlaceList = createAction(ADD_PLACELIST)<
-  Parameters<typeof api.addPlaceList>[0]
+  [Parameters<typeof api.addPlaceList>[0], { afterTodo: Function }]
 >();
 export const addPlaceListSuccess = createAction(ADD_PLACELIST_SUCCESS)<
   api.PlaceList

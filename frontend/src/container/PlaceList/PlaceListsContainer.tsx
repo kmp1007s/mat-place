@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import { RootState } from "modules";
-import { getPlaceListsByUser, deletePlaceList } from "modules/placeList";
+import {
+  getPlaceListsByUser,
+  deletePlaceList,
+  addPlaceList,
+} from "modules/placeList";
 
 import PlaceList from "component/Place/PlaceList";
 import PlaceListsWrapper from "component/Place/PlaceListsWrapper";
@@ -13,6 +17,7 @@ import AddInputBoxContainer from "container/PlaceList/AddInputBoxContainer";
 import { AiOutlinePlus } from "react-icons/ai";
 
 import styled from "lib/styled";
+
 import TopAlert from "component/Common/TopAlert";
 import Button from "component/Common/Button";
 
@@ -73,6 +78,26 @@ function PlaceListContainer(props: Props) {
             ))}
             {showAddInputBox && (
               <AddInputBoxContainer
+                onPositiveButtonClick={(
+                  inputTitle: string,
+                  places: Array<any>,
+                  isPublic: boolean
+                ) => {
+                  dispatch(
+                    addPlaceList([
+                      {
+                        title: inputTitle,
+                        places,
+                        public: isPublic,
+                      },
+                      {
+                        afterTodo: () => {
+                          setShowAddInputBox(false);
+                        },
+                      },
+                    ])
+                  );
+                }}
                 onNegativeButtonClick={() => {
                   setShowAddInputBox(false);
                 }}
