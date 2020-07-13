@@ -65,7 +65,7 @@ export const updateProfileImage = asyncWrapper(async (req, res) => {
 
   const profile = {
     userName: account.profile.userName,
-    image: `/public/profile/img/${file.filename}`,
+    image: `profile/img/${file.filename}`,
   };
 
   account = await accountModel.updateAccountByUserId(userId, {

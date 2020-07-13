@@ -4,6 +4,8 @@ import groupModel from "model/group";
 const Place = new Schema({
   id: String,
   name: String,
+  address: String,
+  phone: String,
 });
 
 /* 장소 리스트 Schema, 그룹별로 관리할 수 있음 */

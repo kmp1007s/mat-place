@@ -23,9 +23,12 @@ export const cretePlaceList = asyncWrapper(async (req, res) => {
         Joi.object().keys({
           id: Joi.string().required(),
           name: Joi.string().required(),
+          address: Joi.string().required(),
+          phone: Joi.string().allow(""),
         })
       )
       .required(),
+    public: Joi.boolean().required(),
   });
 
   const { error } = requestSchema.validate(req.body);
@@ -105,8 +108,11 @@ export const updatePlaceListById = asyncWrapper(async (req, res) => {
       Joi.object().keys({
         id: Joi.string().required(),
         name: Joi.string().required(),
+        address: Joi.string().required(),
+        phone: Joi.string().allow(""),
       })
     ),
+    public: Joi.boolean(),
   });
 
   if (!ObjectId.isValid(id)) return res.badRequest("Unexpected ObjectId"); // ObjectId 검증 실패

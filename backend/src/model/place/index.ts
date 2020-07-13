@@ -11,6 +11,7 @@ interface PlaceListModel extends Model<PlaceListDocument> {
     placeListInfo: {
       title: string;
       places: Array<Place>;
+      public: boolean;
     }
   ): Promise<PlaceListDocument>;
   getAllPlaceListsByUserId(
@@ -33,6 +34,7 @@ interface PlaceListModel extends Model<PlaceListDocument> {
     toUpdate: {
       title?: string;
       places?: Array<Place>;
+      public?: boolean;
     }
   ): Promise<PlaceListDocument>;
   deletePlaceListById(_id: MongooseId): Promise<void>;
