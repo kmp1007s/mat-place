@@ -6,6 +6,7 @@ const place = Router();
 
 place.post("/", loginCheck, placeCtrl.cretePlaceList);
 
+place.get("/", placeCtrl.getAllPublicPlaceList);
 place.get("/:id", placeCtrl.getPlaceListById);
 place.get("/users/:id", placeCtrl.getPlaceListsByUserId);
 

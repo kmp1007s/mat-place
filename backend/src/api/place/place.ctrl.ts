@@ -38,6 +38,11 @@ export const cretePlaceList = asyncWrapper(async (req, res) => {
   res.status(201).json(placeList);
 });
 
+export const getAllPublicPlaceList = asyncWrapper(async (req, res) => {
+  const placeLists = await placeListModel.getAllPublicPlaceLists();
+  res.json(placeLists);
+});
+
 /**
  * [GET] /api/place-lists/:id - 특정 맛집 리스트 조회
  */

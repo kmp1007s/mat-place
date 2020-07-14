@@ -19,6 +19,12 @@ import { AiOutlineClose, AiFillEdit, AiOutlineCheck } from "react-icons/ai";
 import { useDispatch } from "react-redux";
 import { updatePlaceList } from "modules/placeList";
 import { Link } from "react-router-dom";
+import { keyframes } from "@emotion/core";
+
+const slideFromTop = keyframes`
+  0% {opacity: 0; transform: translateY(-10%);}
+  100% {opacity: 1; transform: translateY(0%);}
+`;
 
 export const PlaceListBox = styled(Flex)`
   justify-content: flex-start;
@@ -27,6 +33,7 @@ export const PlaceListBox = styled(Flex)`
   padding: 18px;
   width: 100%;
   border-bottom: 1px solid ${(props) => props.theme.color.GRAY_LIGHT};
+  animation: ${slideFromTop} 0.3s ease;
 
   & > * {
     flex: 100%;

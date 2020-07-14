@@ -18,6 +18,7 @@ const Wrapper = styled.div`
   width: 100%;
   background-color: ${(props) => props.theme.color.WHITE};
   border: 1px solid ${(props) => props.theme.color.GRAY_LIGHT};
+  border-radius: 3px;
   padding: 16px 36px 16px 36px;
   animation: ${fadeIn} 0.7s ease;
 

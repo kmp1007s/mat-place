@@ -21,6 +21,13 @@ PlaceListSchema.statics.createPlaceList = function (userId, placeListInfo) {
   return new this({ userId, ...placeListInfo }).save();
 };
 
+PlaceListSchema.statics.getAllPublicPlaceLists = async function () {
+  const placeLists = await this.find({
+    public: true,
+  });
+  return placeLists.length > 0 ? placeLists : null;
+};
+
 PlaceListSchema.statics.getAllPlaceListsByUserId = async function (userId) {
   const placeLists = await this.find({ userId });
   return placeLists.length > 0 ? placeLists : null;

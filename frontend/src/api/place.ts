@@ -19,6 +19,12 @@ export type PlaceList = {
 
 export type PlaceLists = Array<PlaceList> | null;
 
+export const getAllPublicPlaceLists = () =>
+  request<PlaceLists, void>({
+    method: "GET",
+    url: "place-lists",
+  });
+
 export const getPlaceListsByUser = (userId: string) =>
   request<PlaceLists, void>({
     method: "GET",

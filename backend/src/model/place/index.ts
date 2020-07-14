@@ -14,6 +14,7 @@ interface PlaceListModel extends Model<PlaceListDocument> {
       public: boolean;
     }
   ): Promise<PlaceListDocument>;
+  getAllPublicPlaceLists(): Promise<Array<PlaceListDocument> | null>;
   getAllPlaceListsByUserId(
     userId: string
   ): Promise<Array<PlaceListDocument> | null>;
