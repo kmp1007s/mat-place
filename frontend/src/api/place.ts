@@ -107,3 +107,9 @@ export const deletePlaceList = (placeListId: string) =>
     method: "DELETE",
     url: `place-lists/${placeListId}`,
   });
+
+export const deleteGroup = (groupName: string) =>
+  request<void, void>({
+    method: "DELETE",
+    url: `place-lists/groups/${groupName}`,
+  });

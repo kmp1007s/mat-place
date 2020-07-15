@@ -278,14 +278,17 @@ export const updateGroup = asyncWrapper(async (req, res) => {
 export const deleteGroup = asyncWrapper(async (req, res) => {
   const { userId } = req.user;
   const { name } = req.params;
+  console.log(userId);
+  console.log(name);
 
   const group = await groupModel.getGroupByGroupName(userId, name);
   if (!group)
     // 그룹 찾기 실패
     return res.notFound("Group");
-  if (userIsCreator(userId, group.userId)) return res.forbidden();
+  if (userIsCreator(userId, ("" + group.userId).slice(1)))
+    return res.forbidden();
 
   await groupModel.deleteGroup(userId, name);
 
-  res.status(204);
+  res.status(204).end();
 });

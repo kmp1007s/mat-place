@@ -8,6 +8,8 @@ import TopAlert from "component/Common/TopAlert";
 import Input from "component/Common/Input";
 import Button from "component/Common/Button";
 
+import { deleteGroup } from "api/place";
+
 const Wrapper = styled.ul`
   display: inline-block;
   margin: 0;
@@ -60,6 +62,14 @@ function GroupContainer(props: Props) {
             key={idx}
             group={group}
             onListItemClick={props.onListItemClick}
+            onDeleteClick={async (group: Group) => {
+              await deleteGroup(group.name);
+              const toUpdate = groups.filter(
+                (item) => item.name !== group.name
+              );
+              console.log(toUpdate);
+              setGroups(toUpdate);
+            }}
           />
         ))}
         {props.showAdd && (
