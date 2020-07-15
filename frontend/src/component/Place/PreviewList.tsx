@@ -158,7 +158,7 @@ function PreviewList(props: Props) {
             });
           }}
         />
-        <LikeIcon />
+        {/* <LikeIcon /> */}
       </IconWrapper>
     </Wrapper>
   );

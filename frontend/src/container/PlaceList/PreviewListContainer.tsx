@@ -63,20 +63,20 @@ function PreviewListContainer() {
       let urlsToAppend: Array<string> | null = null;
 
       if (placeLists) {
-        // urlsToAppend = [];
-        // for (let placeList of placeLists) {
-        //   const place = placeList.places[0];
-        //   const { data }: any = await imageSearch({
-        //     keyword: place.name,
-        //     size: 1,
-        //   });
-        //   const documents = data.documents;
-        //   // 검색된 문서가 한개라도 있다면
-        //   if (documents.length > 0) {
-        //     const url = documents[0].thumbnail_url;
-        //     urlsToAppend.push(url);
-        //   }
-        // }
+        urlsToAppend = [];
+        for (let placeList of placeLists) {
+          const place = placeList.places[0];
+          const { data }: any = await imageSearch({
+            keyword: place.name,
+            size: 1,
+          });
+          const documents = data.documents;
+          // 검색된 문서가 한개라도 있다면
+          if (documents.length > 0) {
+            const url = documents[0].thumbnail_url;
+            urlsToAppend.push(url);
+          }
+        }
 
         let remainListsCount = placeLists.length;
         let endIdx = 0;
