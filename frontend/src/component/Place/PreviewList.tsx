@@ -4,7 +4,7 @@ import { keyframes } from "@emotion/core";
 import styled from "lib/styled";
 
 import { PlaceList } from "api/place";
-import { AiFillPicture, AiOutlineUser } from "react-icons/ai";
+import { AiFillPicture, AiOutlineUser, AiFillLike } from "react-icons/ai";
 
 import FaceBook from "component/Common/FaceBook";
 import Kakao from "component/Common/Kakao";
@@ -92,6 +92,21 @@ const ImageIcon = styled(AiFillPicture)`
   color ${(props) => props.theme.color.WHITE};
 `;
 
+const LikeIcon = styled(AiFillLike)`
+  width: 20px;
+  height: 20px;
+  float: left;
+  vertical-align: middle;
+  color: ${(props) => props.theme.color.BLUE};
+  transition: all 0.2s ease;
+  user-select: none;
+
+  &:hover {
+    transform: scale(1.1);
+    transition: all 0.2s ease;
+  }
+`;
+
 type Props = PlaceList & {
   path: string;
 };
@@ -100,7 +115,7 @@ function PreviewList(props: Props) {
   return (
     <Wrapper>
       <Image path={props.path}>{!props.path && <ImageIcon size={46} />}</Image>
-      <Title to={`/place-lists/${props._id}`}>{props.title}</Title>
+      <Title to={`/users/${props.userId}#${props._id}`}>{props.title}</Title>
       <UserId to={`/users/${props.userId}`}>
         <StyledUserIcon />
         {props.userId}
@@ -143,6 +158,7 @@ function PreviewList(props: Props) {
             });
           }}
         />
+        <LikeIcon />
       </IconWrapper>
     </Wrapper>
   );

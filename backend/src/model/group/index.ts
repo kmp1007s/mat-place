@@ -12,6 +12,7 @@ interface GroupModel extends Model<GroupDocument> {
   ): Promise<GroupDocument>;
   getGroupByGroupName(userId: string, name: string): Promise<GroupDocument>;
   getGroupNames(userId: string): Promise<Array<string> | null>;
+  getGroups(userId: string): Promise<Array<GroupDocument>>;
   getPlaceListIdsByGroupName(
     userId: string,
     name: string

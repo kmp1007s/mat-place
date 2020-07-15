@@ -16,7 +16,9 @@ place.delete("/:id", loginCheck, placeCtrl.deletePlaceListById);
 place.post("/public/:id", loginCheck, placeCtrl.makePlaceListPublic);
 place.post("/private/:id", loginCheck, placeCtrl.makePlaceListPrivate);
 
-place.get("/groups/:userId", placeCtrl.getGroupsByUserId);
+place.get("/groups/users/:userId", placeCtrl.getGroupsByUserId);
+place.get("/groups/:name", placeCtrl.getGroup);
+
 place.post("/groups", loginCheck, placeCtrl.createGroup);
 place.patch("/groups/:name", loginCheck, placeCtrl.updateGroup);
 place.delete("/groups/:name", loginCheck, placeCtrl.deleteGroup);

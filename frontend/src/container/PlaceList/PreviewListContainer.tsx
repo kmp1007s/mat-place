@@ -19,6 +19,7 @@ const Wrapper = styled.div`
   left: 50%;
   transform: translateX(-50%);
   background-color: ${(props) => props.theme.color.WHITE};
+  height: 546px;
 `;
 
 const LeftArrow = styled(AiOutlineCaretLeft)`
@@ -84,7 +85,8 @@ function PreviewListContainer() {
           endIdx++;
           remainListsCount -= listsInPageCnt;
 
-          if (remainListsCount < 5) break;
+          // 남은 리스트가 6개 이상이라면 새로 인덱스를 생성해야 함
+          if (remainListsCount <= 5) break;
         }
 
         setPlaceLists(placeLists);
@@ -112,22 +114,26 @@ function PreviewListContainer() {
     <>
       {placeListsToShow && (
         <Wrapper>
-          <LeftArrow
-            size={28}
-            onClick={(e) => {
-              if (curIdx !== 0) {
-                setCurIdx(curIdx - 1);
-              }
-            }}
-          />
-          <RightArrow
-            size={28}
-            onClick={(e) => {
-              if (curIdx < endIdx) {
-                setCurIdx(curIdx + 1);
-              }
-            }}
-          />
+          {curIdx !== 0 && (
+            <LeftArrow
+              size={28}
+              onClick={(e) => {
+                if (curIdx !== 0) {
+                  setCurIdx(curIdx - 1);
+                }
+              }}
+            />
+          )}
+          {curIdx !== endIdx && (
+            <RightArrow
+              size={28}
+              onClick={(e) => {
+                if (curIdx < endIdx) {
+                  setCurIdx(curIdx + 1);
+                }
+              }}
+            />
+          )}
 
           {placeListsToShow.map((placeList, idx) => (
             <PreviewList

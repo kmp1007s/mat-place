@@ -18,6 +18,10 @@ import {
   deletePlaceListSuccess,
   deletePlaceListFail,
   DELETE_PLACELIST,
+  getPlaceListsByGroupSuccess,
+  getPlaceListsByGroup,
+  getPlaceListsByGroupFail,
+  GET_PLACELISTS_GROUP,
 } from "./action";
 
 function* getPlaceListUserSaga(action: ReturnType<typeof getPlaceListsByUser>) {
@@ -30,6 +34,21 @@ function* getPlaceListUserSaga(action: ReturnType<typeof getPlaceListsByUser>) {
   } catch (e) {
     console.log(e);
     yield put(getPlaceListsByUserFail());
+  }
+}
+
+function* getPlaceListGroupSaga(
+  action: ReturnType<typeof getPlaceListsByGroup>
+) {
+  try {
+    const { data }: AxiosResponse<api.PlaceLists> = yield call(
+      api.getPlaceListsByGroup,
+      ...action.payload
+    );
+    yield put(getPlaceListsByGroupSuccess(data));
+  } catch (e) {
+    console.log(e);
+    yield put(getPlaceListsByGroupFail());
   }
 }
 
@@ -57,6 +76,21 @@ function* updatePlaceListSaga(action: ReturnType<typeof updatePlaceList>) {
       api.updatePlaceList,
       ...action.payload[0]
     );
+
+    if (action.payload[1].groupName) {
+      const { data: groupData }: AxiosResponse<api.Group> = yield call(
+        api.getGroup,
+        action.payload[1].groupName
+      );
+      const existPlaceListIds = groupData.placeListIds;
+
+      if (data._id && !existPlaceListIds.includes(data._id)) {
+        yield call(api.updateGroup, action.payload[1].groupName, {
+          placeListIds: existPlaceListIds.concat(data._id),
+        });
+      }
+    }
+
     yield put(updatePlaceListSuccess(data));
     action.payload[1].afterTodo();
   } catch (e) {
@@ -77,6 +111,7 @@ function* deletePlaceListSaga(action: ReturnType<typeof deletePlaceList>) {
 
 export function* placeListsSaga() {
   yield takeEvery(GET_PLACELISTS_USER, getPlaceListUserSaga);
+  yield takeEvery(GET_PLACELISTS_GROUP, getPlaceListGroupSaga);
   yield takeEvery(ADD_PLACELIST, addPlaceListSaga);
   yield takeEvery(UPDATE_PLACELIST, updatePlaceListSaga);
   yield takeEvery(DELETE_PLACELIST, deletePlaceListSaga);

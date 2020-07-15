@@ -81,7 +81,8 @@ function PlaceListContainer(props: Props) {
                 onPositiveButtonClick={(
                   inputTitle: string,
                   places: Array<any>,
-                  isPublic: boolean
+                  isPublic: boolean,
+                  selectedGroup: string
                 ) => {
                   dispatch(
                     addPlaceList([
@@ -101,6 +102,7 @@ function PlaceListContainer(props: Props) {
                 onNegativeButtonClick={() => {
                   setShowAddInputBox(false);
                 }}
+                userId={props.userId}
               />
             )}
             {
@@ -146,14 +148,14 @@ function PlaceListContainer(props: Props) {
           )}
         </>
       )}
-      {
+      {/* {
         // 로딩은 성공했으나 생성한 맛집리스트가 없는 경우
         loading === "SUCCESS" && placeLists === null && (
           <>
-            <h1>공개된 맛집 리스트가 없습니다</h1>
+            <h1>맛집 리스트가 없습니다</h1>
           </>
         )
-      }
+      } */}
     </>
   );
 }

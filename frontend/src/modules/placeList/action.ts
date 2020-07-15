@@ -5,6 +5,11 @@ export const GET_PLACELISTS_USER = "place/GET_PLACELISTS_USER";
 export const GET_PLACELISTS_USER_SUCCESS = "place/GET_PLACELISTS_USER_SUCCESS";
 export const GET_PLACELISTS_USER_FAIL = "place/GET_PLACELISTS_USER_FAIL";
 
+export const GET_PLACELISTS_GROUP = "place/GET_PLACELISTS_GROUP";
+export const GET_PLACELISTS_GROUP_SUCCESS =
+  "place/GET_PLACELISTS_GROUP_SUCCESS";
+export const GET_PLACELISTS_GROUP_FAIL = "place/GET_PLACELISTS_GROUP_FAIL";
+
 export const ADD_PLACELIST = "place/ADD_PLACELIST";
 export const ADD_PLACELIST_SUCCESS = "place/ADD_PLACELIST_SUCCESS";
 export const ADD_PLACELIST_FAIL = "place/ADD_PLACELIST_FAIL";
@@ -23,6 +28,16 @@ export const getPlaceListsByUserSuccess = createAction(
 )<api.PlaceLists>();
 export const getPlaceListsByUserFail = createAction(GET_PLACELISTS_USER_FAIL)();
 
+export const getPlaceListsByGroup = createAction(GET_PLACELISTS_GROUP)<
+  Parameters<typeof api.getPlaceListsByGroup>
+>();
+export const getPlaceListsByGroupSuccess = createAction(
+  GET_PLACELISTS_GROUP_SUCCESS
+)<api.PlaceLists>();
+export const getPlaceListsByGroupFail = createAction(
+  GET_PLACELISTS_GROUP_FAIL
+)();
+
 export const addPlaceList = createAction(ADD_PLACELIST)<
   [Parameters<typeof api.addPlaceList>[0], { afterTodo: Function }]
 >();
@@ -32,7 +47,10 @@ export const addPlaceListSuccess = createAction(ADD_PLACELIST_SUCCESS)<
 export const addPlaceListFail = createAction(ADD_PLACELIST_FAIL)();
 
 export const updatePlaceList = createAction(UPDATE_PLACELIST)<
-  [Parameters<typeof api.updatePlaceList>, { afterTodo: Function }]
+  [
+    Parameters<typeof api.updatePlaceList>,
+    { groupName: string; afterTodo: Function }
+  ]
 >();
 export const updatePlaceListSuccess = createAction(UPDATE_PLACELIST_SUCCESS)<
   api.PlaceList

@@ -17,5 +17,5 @@ export const SECONDARY_LIGHT = "#936bf9";
 export const SECONDARY_DARK = "#254ac4";
 
 export const RED = "#ed4528";
-
+export const BLUE = "#2772ea";
 export const GREEN = "#64d339";

@@ -31,10 +31,48 @@ export const getPlaceListsByUser = (userId: string) =>
     url: `place-lists/users/${userId}`,
   });
 
+export type CreateGroupParam = {
+  name: string;
+  placeListIds?: Array<string>;
+};
+export type Group = {
+  userId: string;
+  name: string;
+  placeListIds: Array<string>;
+  createdAt: string;
+};
+export const createGroup = (data: CreateGroupParam) =>
+  request<Group, CreateGroupParam>({
+    method: "POST",
+    url: "place-lists/groups",
+    data,
+  });
+
+export type GetGroupResponse = Array<string> | null;
 export const getGroupByUser = (userId: string) =>
-  request<Array<string> | null, void>({
+  request<Array<Group>, void>({
     method: "GET",
-    url: `place-lists/groups/${userId}`,
+    url: `place-lists/groups/users/${userId}`,
+  });
+
+type UpdateGroupParam = { nameUpdateTo?: string; placeListIds?: Array<string> };
+export const updateGroup = (groupName: string, data: UpdateGroupParam) =>
+  request<Group, UpdateGroupParam>({
+    method: "PATCH",
+    url: `place-lists/groups/${groupName}`,
+    data,
+  });
+
+export const getPlaceListsByGroup = (groupName: string, userId: string) =>
+  request<PlaceLists, void>({
+    method: "GET",
+    url: `place-lists/users/${userId}?group=${groupName}`,
+  });
+
+export const getGroup = (groupName: string) =>
+  request<Group, void>({
+    method: "GET",
+    url: `place-lists/groups/${groupName}`,
   });
 
 type AddPlaceListParam = {

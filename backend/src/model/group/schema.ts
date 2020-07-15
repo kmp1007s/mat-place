@@ -27,6 +27,13 @@ GroupSchema.statics.getGroupNames = function (userId) {
   });
 };
 
+GroupSchema.statics.getGroups = async function (userId) {
+  const docs = await this.find({
+    userId,
+  });
+  return docs.length > 0 ? docs : null;
+};
+
 GroupSchema.statics.getGroupByGroupName = function (userId, name) {
   return this.findOne({ userId, name });
 };
@@ -36,7 +43,31 @@ GroupSchema.statics.getPlaceListIdsByGroupName = async function (userId, name) {
   if (groupDoc) return groupDoc.placeListIds;
 };
 
-GroupSchema.statics.updateGroup = function (userId, name, toUpdate) {
+GroupSchema.statics.updateGroup = async function (userId, name, toUpdate) {
+  if (toUpdate.placeListIds) {
+    const docs = await this.find({
+      userId,
+      placeListIds: { $in: toUpdate.placeListIds },
+    });
+
+    if (docs.length > 0) {
+      for (let doc of docs) {
+        const docPlaceListIds = doc.placeListIds.map((placeListId) =>
+          (" " + placeListId).slice(1)
+        );
+
+        const placeListIdsUpdated = docPlaceListIds.filter(
+          (placeListId) => !toUpdate.placeListIds.includes(placeListId)
+        );
+
+        console.log(placeListIdsUpdated);
+        doc.placeListIds = placeListIdsUpdated;
+
+        await doc.save();
+      }
+    }
+  }
+
   return this.findOneAndUpdate({ userId, name }, toUpdate, {
     new: true,
   });

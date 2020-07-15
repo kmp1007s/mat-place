@@ -7,6 +7,7 @@ type Props = {
   existPublic?: boolean;
   onPositiveButtonClick?: Function;
   onNegativeButtonClick?: Function;
+  userId: string;
 };
 
 function AddInputBoxContainer(props: Props) {
@@ -22,6 +23,7 @@ function AddInputBoxContainer(props: Props) {
   );
   const [inputTitle, setInputTitle] = useState(props.existTitle || "");
   const [isPublic, setIsPublic] = useState(props.existPublic || false);
+  const [selectedGroup, setSelectedGroup] = useState("");
 
   return (
     <AddInputBox
@@ -30,6 +32,7 @@ function AddInputBoxContainer(props: Props) {
       setInputTitle={setInputTitle}
       isPublic={isPublic}
       setIsPublic={setIsPublic}
+      setSelectedGroup={setSelectedGroup}
       onListItemClick={(place: any) => {
         setSelectedPlaces((prevState) => {
           let haveToAppend = true;
@@ -50,11 +53,17 @@ function AddInputBoxContainer(props: Props) {
         }));
 
         if (props.onPositiveButtonClick)
-          props.onPositiveButtonClick(inputTitle, places, isPublic);
+          props.onPositiveButtonClick(
+            inputTitle,
+            places,
+            isPublic,
+            selectedGroup
+          );
       }}
       onNegativeButtonClick={
         props.onNegativeButtonClick ? props.onNegativeButtonClick : () => {}
       }
+      userId={props.userId}
     />
   );
 }

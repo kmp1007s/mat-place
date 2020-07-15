@@ -7,6 +7,7 @@ import {
   ADD_PLACELIST_SUCCESS,
   UPDATE_PLACELIST_SUCCESS,
   DELETE_PLACELIST_SUCCESS,
+  GET_PLACELISTS_GROUP_SUCCESS,
 } from "./action";
 
 const initialState: PlaceState = {
@@ -17,6 +18,11 @@ const initialState: PlaceState = {
 const reducer = createReducer<PlaceState, PlaceAction>(initialState, {
   [GET_PLACELISTS_USER]: (state, action) => ({ ...state, loading: "STARTED" }),
   [GET_PLACELISTS_USER_SUCCESS]: (state, action) => ({
+    ...state,
+    placeLists: action.payload,
+    loading: "SUCCESS",
+  }),
+  [GET_PLACELISTS_GROUP_SUCCESS]: (state, action) => ({
     ...state,
     placeLists: action.payload,
     loading: "SUCCESS",

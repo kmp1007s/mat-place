@@ -8,6 +8,9 @@ import Button from "component/Common/Button";
 import PlaceItem from "component/Place/AddInputBoxPlaceItem";
 
 import PlaceSearchContainer from "container/PlaceSearchContainer";
+import GroupContainer from "container/GroupContainer";
+
+import { Group, updateGroup } from "api/place";
 
 const fadeIn = keyframes`
   0% {opacity: 0.5;}
@@ -72,9 +75,11 @@ type Props = {
   setInputTitle: any;
   isPublic: boolean;
   setIsPublic: any;
+  setSelectedGroup: Function;
   onListItemClick: Function;
   onPositiveButtonClick: Function;
   onNegativeButtonClick: Function;
+  userId: string;
 };
 
 function AddInputBox(props: Props) {
@@ -98,6 +103,16 @@ function AddInputBox(props: Props) {
       </SelectedPlaceWrapper>
       <div>
         <PlaceSearchContainer onListItemClick={props.onListItemClick} />
+      </div>
+      <div>
+        <GroupContainer
+          userId={props.userId}
+          onListItemClick={(group: Group) => {
+            console.log(group.placeListIds);
+            props.setSelectedGroup(group.name);
+          }}
+          showAdd={false}
+        />
       </div>
       <CheckboxArea>
         <span className="noticeText">이 리스트를 공개합니다</span>

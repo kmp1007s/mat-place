@@ -191,8 +191,15 @@ export const makePlaceListPrivate = asyncWrapper(async (req, res) => {
 export const getGroupsByUserId = asyncWrapper(async (req, res) => {
   const { userId } = req.params;
 
-  const groups = await groupModel.getGroupNames(userId);
+  const groups = await groupModel.getGroups(userId);
   res.json(groups);
+});
+
+export const getGroup = asyncWrapper(async (req, res) => {
+  const { userId } = req.user;
+  const { name } = req.params;
+  const group = await groupModel.getGroupByGroupName(userId, name);
+  res.json(group);
 });
 
 /**
@@ -200,7 +207,7 @@ export const getGroupsByUserId = asyncWrapper(async (req, res) => {
  */
 export const createGroup = asyncWrapper(async (req, res) => {
   const { userId } = req.user;
-  const { name, placeListIds } = req.body;
+  let { name, placeListIds } = req.body;
 
   const requestSchema = Joi.object().keys({
     name: Joi.string().required(),
@@ -209,6 +216,8 @@ export const createGroup = asyncWrapper(async (req, res) => {
 
   const { error } = requestSchema.validate(req.body);
   if (error) return res.badRequest(error.message); // 리퀘스트 검증 실패
+
+  if (!placeListIds) placeListIds = [];
 
   for (let i = 0; placeListIds.length > 0 && i < placeListIds.length; i++) {
     if (!ObjectId.isValid(placeListIds[i]))

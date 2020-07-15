@@ -134,7 +134,8 @@ function PlaceList(props: Props) {
           onPositiveButtonClick={(
             inputTitle: string,
             places: Array<any>,
-            isPublic: boolean
+            isPublic: boolean,
+            selectedGroup: string
           ) => {
             if (props._id) {
               dispatch(
@@ -148,6 +149,7 @@ function PlaceList(props: Props) {
                     },
                   ],
                   {
+                    groupName: selectedGroup,
                     afterTodo: () => {
                       setIsEdit(false);
                     },
@@ -159,6 +161,7 @@ function PlaceList(props: Props) {
           onNegativeButtonClick={() => {
             setIsEdit(false);
           }}
+          userId={props.userId}
         />
       )}
       {!isEdit && (
